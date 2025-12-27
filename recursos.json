@@ -1,48 +1,4 @@
-
 [
-  {
-    "nombre": "Perros",
-    "tipo": "Animal",
-    "descripcion": "Grupo de perros disponibles en el refugio.",
-    "asociado": ["Correas y Arneses"],
-    "exclusiones": ["Vacuna Triple Felina","Vacuna Combinada para Conejos","Vacuna Preventiva para Roedores","Vacuna Combinada para Aves"]
-  },
-  {
-    "nombre": "Gatos",
-    "tipo": "Animal",
-    "descripcion": "Grupo de gatos disponibles en el refugio.",
-    "asociado": ["Caja de Transporte"],
-    "exclusiones": ["Vacuna Séxtuple Canina","Vacuna Combinada para Conejos","Vacuna Preventiva para Roedores","Vacuna Combinada para Aves"]
-  },
-  {
-    "nombre": "Conejos",
-    "tipo": "Animal",
-    "descripcion": "Grupo de conejos disponibles en el refugio.",
-    "asociado": ["Jaula de Transporte"],
-    "exclusiones": ["Vacuna Triple Felina","Vacuna Séxtuple Canina","Vacuna Preventiva para Roedores","Vacuna Combinada para Aves"]
-  },
-  {
-    "nombre": "Aves",
-    "tipo": "Animal",
-    "descripcion": "Grupo de aves disponibles en el refugio.",
-    "asociado": ["Jaula de Transporte"],
-    "exclusiones": ["Vacuna Triple Felina","Vacuna Séxtuple Canina","Vacuna Combinada para Conejos","Vacuna Preventiva para Roedores"]
-  },
-  {
-    "nombre": "Serpientes",
-    "tipo": "Animal",
-    "descripcion": "Grupo de serpientes bajo cuidado especial.",
-    "asociado": ["Terrario Especial"],
-    "exclusiones": ["Vacuna Combinada para Aves","Vacuna Combinada para Conejos","Vacuna Preventiva para Roedores","Vacuna Séxtuple Canina","Vacuna Triple Felina"]
-  },
-  {
-    "nombre": "Roedores",
-    "tipo": "Animal",
-    "descripcion": "Grupo de roedores pequeños en el refugio.",
-    "asociado": ["Jaula de Transporte"],
-    "exclusiones": ["Vacuna Combinada para Aves","Vacuna Combinada para Conejos","Vacuna Séxtuple Canina","Vacuna Triple Felina"]
-  },
-
   {
     "nombre": "Vacuna Séxtuple Canina",
     "tipo": "Vacuna",
@@ -348,9 +304,58 @@
     "descripcion": "Mezcla de semillas para aves y roedores.",
     "asociado": ["Aves","Roedores"],
     "exclusiones": ["Gatos","Conejos","Perros","Serpientes"]
-  }
+  },
+
+  {
+      "nombre": "Perros",
+      "tipo": "Animal",
+      "estado": "libre",
+      "descripcion": "Grupo de perros disponibles en el refugio.",
+      "asociado": ["Correas y Arneses"],
+      "exclusiones": ["Vacuna Triple Felina","Vacuna Combinada para Conejos","Vacuna Preventiva para Roedores","Vacuna Combinada para Aves"]
+    },
+    {
+      "nombre": "Gatos",
+      "tipo": "Animal",
+      "estado": "libre",
+      "descripcion": "Grupo de gatos disponibles en el refugio.",
+      "asociado": ["Caja de Transporte"],
+      "exclusiones": ["Vacuna Sextuple Canina","Vacuna Combinada para Conejos","Vacuna Preventiva para Roedores","Vacuna Combinada para Aves"]
+    },
+    {
+      "nombre": "Conejos",
+      "tipo": "Animal",
+      "estado": "libre",
+      "descripcion": "Grupo de conejos disponibles en el refugio.",
+      "asociado": ["Jaula de Transporte"],
+      "exclusiones": ["Vacuna Triple Felina","Vacuna Sextuple Canina","Vacuna Preventiva para Roedores","Vacuna Combinada para Aves"]
+    },
+    {
+      "nombre": "Aves",
+      "tipo": "Animal",
+      "estado": "libre",
+      "descripcion": "Grupo de aves disponibles en el refugio.",
+      "asociado": ["Jaula de Transporte"],
+      "exclusiones": ["Vacuna Triple Felina","Vacuna Sextuple Canina","Vacuna Combinada para Conejos","Vacuna Preventiva para Roedores"]
+    },
+    {
+      "nombre": "Serpientes",
+      "tipo": "Animal",
+      "estado": "libre",
+      "descripcion": "Grupo de serpientes bajo cuidado especial.",
+      "asociado": ["Terrario Especial"],
+      "exclusiones": ["Vacuna Combinada para Aves","Vacuna Combinada para Conejos","Vacuna Preventiva para Roedores","Vacuna Sextuple Canina","Vacuna Triple Felina"]
+    },
+    {
+      "nombre": "Roedores",
+      "tipo": "Animal",
+      "estado": "libre",
+      "descripcion": "Grupo de roedores pequeños en el refugio.",
+      "asociado": ["Jaula de Transporte"],
+      "exclusiones": ["Vacuna Combinada para Aves","Vacuna Combinada para Conejos","Vacuna Sextuple Canina","Vacuna Triple Felina"]
+    }
 ]
 
-    
-    
-  
+
+
+
