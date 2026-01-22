@@ -16,7 +16,7 @@ class PlaceScreen(Screen):
         root.add_widget(background)
         label = Label(text="¿Dónde quieres realizar el evento?", font_name="fonts/SHOWG.TTF", font_size="32sp",color=(0, 0.5, 0.5, 1),pos_hint={"center_x":0.5, "center_y":0.9})
         root.add_widget(label)
-        places=[ ("sala_de_procedimientos"), ("sala_quirurgica"), ("sala_de_entrevistas"), ("area_de_alojamiento"), ("area_de_alimentacion"), ("area_de_bano"), ("patio_de_ejercicios"), ("exterior")] 
+        places=[ ("sala_de_procedimientos"), ("sala_quirúrgica"), ("sala_de_entrevistas"), ("área_de_alojamiento"), ("área_de_alimentacion"), ("área_de_bano"), ("patio_de_ejercicios"), ("exterior")] 
         x_pos = 0.3 
         for i,name in enumerate(places):
             row=i//4
