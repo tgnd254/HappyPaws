@@ -26,7 +26,20 @@ class PlaceScreen(Screen):
             btn = ImageButton(source="images/"+name+".png",allow_stretch=False,keep_ratio=True,size_hint=(0.20, 0.20),pos_hint={"center_x":x_pos,"center_y":y_pos})
             btn.bind(on_press=lambda inst,p=name: self.go_to(p)) 
             root.add_widget(btn)
+        def go_back(inst):
+            self.manager.current="home"
+        btn_back = ImageButton (
+            source="images/back.png",
+            size_hint=(None, None),
+            size=(60, 60),
+            allow_stretch=True,
+            keep_ratio=True,
+            pos_hint={"center_x": 0.05,"center_y": 0.1}
+        )
+        btn_back.bind(on_press=go_back)
+        root.add_widget(btn_back)
         self.add_widget(root)
+
     def go_to(self,place): 
         self.manager.selected_place=place
         self.manager.current="resources"

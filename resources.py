@@ -80,11 +80,10 @@ class ResourcesScreen(Screen):
                 Color(0.6, 1, 0.6, 1) 
                 rr = RoundedRectangle(pos=card.pos, size=card.size, radius=[12])
             def update_rr(instance,value,rect=rr,widget=card): 
-                rect.pos = (widget.x+5,widget.y-5) 
-                rr.size = (widget.width-10,widget.height-10)
+                rect.pos = (widget.x+5 ,widget.y+5) 
+                rect.size = (widget.width-10,widget.height-10)
             card.bind(pos=update_rr, size=update_rr) 
-            Clock.schedule_once(lambda dt, rect=rr, widget=card: setattr(rect, "pos", widget.pos), 0)
-            Clock.schedule_once(lambda dt, rect=rr, widget=card: setattr(rect, "size", widget.size), 0)
+            Clock.schedule_once(lambda dt: update_rr(card,None), 0)
 
             btn = ImageButton(
                 source="images/" + r["name"] + ".png",
@@ -147,6 +146,20 @@ class ResourcesScreen(Screen):
         )
         btn_continue.bind(on_press=self.try_continue)
         root.add_widget(btn_continue)
+
+        def go_back(inst):
+            self.manager.current="place"
+
+        btn_back = ImageButton (
+                source="images/back.png",
+                size_hint=(None, None),
+                size=(60, 60),
+                allow_stretch=True,
+                keep_ratio=True,
+                pos_hint={"center_x": 0.05,"center_y": 0.1}
+        )
+        btn_back.bind(on_press=go_back)
+        root.add_widget(btn_back)
 
         self.add_widget(root)
 

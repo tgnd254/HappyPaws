@@ -7,6 +7,7 @@ from kivy.core.window import Window
 
 from place import PlaceScreen
 from resources import ResourcesScreen
+from date import DateScreen
 
 class ImageButton(ButtonBehavior, Image): 
     pass
@@ -31,6 +32,7 @@ class FirstWindow(App):
         sm.add_widget(HomeScreen(name="home"))
         sm.add_widget(PlaceScreen(name="place"))
         sm.add_widget(ResourcesScreen(name="resources"))
+        sm.add_widget(DateScreen(name="date"))
         sm.current="home"
         return sm
         
