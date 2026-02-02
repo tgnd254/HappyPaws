@@ -5,7 +5,7 @@
     "description": "Protege a perros contra moquillo, parvovirus, hepatitis y otras enfermedades.",
     "associated": ["Veterinario", "Perros"],
     "exclusions": ["Gatos", "Roedores", "Serpientes", "Conejos", "Aves"],
-    "state": "libre"
+    "quantity": 5
   },
   {
     "name": "Vacuna Triple Felina",
@@ -13,7 +13,7 @@
     "description": "Protege a gatos contra rinotraqueítis, calicivirus y panleucopenia.",
     "associated": ["Veterinario", "Gatos"],
     "exclusions": ["Perros", "Roedores", "Serpientes", "Conejos", "Aves"],
-    "state": "libre"
+    "quantity": 5
   },
   {
     "name": "Vacuna Combinada para Conejos",
@@ -21,7 +21,7 @@
     "description": "Protege a conejos contra mixomatosis y enfermedad hemorrágica viral.",
     "associated": ["Veterinario", "Conejos"],
     "exclusions": ["Perros", "Roedores", "Serpientes", "Gatos", "Aves"],
-    "state": "libre"
+    "quantity": 3
   },
   {
     "name": "Vacuna Preventiva para Roedores",
@@ -29,7 +29,7 @@
     "description": "Control sanitario general para roedores en refugios.",
     "associated": ["Veterinario", "Roedores"],
     "exclusions": ["Perros", "Gatos", "Serpientes", "Conejos", "Aves"],
-    "state": "libre"
+    "quantity": 3
   },
   {
     "name": "Vacuna Combinada para Aves",
@@ -37,7 +37,7 @@
     "description": "Protege a aves contra Newcastle, bronquitis infecciosa y Gumboro.",
     "associated": ["Veterinario", "Aves"],
     "exclusions": ["Perros", "Roedores", "Serpientes", "Conejos", "Gatos"],
-    "state": "libre"
+    "quantity": 4
   },
 
   {
@@ -46,7 +46,7 @@
     "description": "Antiparasitario usado en desparasitación rutinaria.",
     "associated": ["Veterinario"],
     "exclusions": ["Croquetas Premium", "Carne Congelada", "Heno Premium", "Mezcla de Semillas"],
-    "state": "libre"
+    "quantity": 5
   },
   {
     "name": "Anestesia General (Propofol)",
@@ -54,7 +54,7 @@
     "description": "Anestésico utilizado en procedimientos quirúrgicos.",
     "associated": ["Instrumental Quirúrgico", "Veterinario"],
     "exclusions": ["Croquetas Premium", "Carne Congelada", "Heno Premium", "Mezcla de Semillas"],
-    "state": "libre"
+    "quantity": 2
   },
   {
     "name": "Sedantes (Xilazina)",
@@ -62,7 +62,7 @@
     "description": "Sedante veterinario utilizado en rescates y traslados de animales nerviosos.",
     "associated": ["Veterinario"],
     "exclusions": ["Entrenador Certificado", "Juguetes Interactivos"],
-    "state": "libre"
+    "quantity": 3
   },
 
   {
@@ -71,7 +71,7 @@
     "description": "Profesional encargado de la salud animal.",
     "associated": ["Kit Médico Básico"],
     "exclusions": ["Entrenador Certificado", "Voluntarios Paseadores"],
-    "state": "libre"
+    "quantity": 2
   },
   {
     "name": "Voluntario",
@@ -79,7 +79,7 @@
     "description": "Persona que apoya en tareas generales del refugio.",
     "associated": ["Escoba Industrial", "Desinfectante"],
     "exclusions": ["Voluntario de Adopciones", "Personal de Recepción"],
-    "state": "libre"
+    "quantity": 4
   },
   {
     "name": "Voluntario de Adopciones",
@@ -87,7 +87,7 @@
     "description": "Encargado de acompañar procesos de adopción.",
     "associated": ["Cámara Digital"],
     "exclusions": ["Voluntario"],
-    "state": "libre"
+    "quantity": 1
   },
   {
     "name": "Voluntarios Paseadores",
@@ -95,7 +95,7 @@
     "description": "Encargados de pasear a los perros.",
     "associated": ["Correas y Arneses", "Bolsas Sanitarias"],
     "exclusions": ["Veterinario", "Voluntario de Adopciones"],
-    "state": "libre"
+    "quantity": 3
   },
   {
     "name": "Entrenador Certificado",
@@ -103,7 +103,7 @@
     "description": "Especialista en conducta y obediencia animal.",
     "associated": ["Juguetes Interactivos"],
     "exclusions": ["Veterinario"],
-    "state": "libre"
+    "quantity": 1
   },
   {
     "name": "Personal de Recepción",
@@ -111,7 +111,7 @@
     "description": "Encargado de la atención al público y de abrir el refugio.",
     "associated": ["Llaves del Refugio"],
     "exclusions": ["Voluntario"],
-    "state": "libre"
+    "quantity": 1
   },
 
   {
@@ -120,7 +120,7 @@
     "description": "Llaves utilizadas para abrir y cerrar el refugio.",
     "associated": ["Personal de Recepción"],
     "exclusions": ["Voluntario"],
-    "state": "libre"
+    "quantity": 1
   },
   {
     "name": "Cámara Digital",
@@ -128,34 +128,24 @@
     "description": "Cámara para registrar procesos de adopción y difusión.",
     "associated": ["Voluntario de Adopciones"],
     "exclusions": ["Veterinario"],
-    "state": "libre"
+    "quantity": 1
   },
 
   {
     "name": "Correas y Arneses",
-    "place": [
-      "área_de_alojamiento",
-      "exterior",
-      "patio_de_ejercicios",
-      "sala_de_entrevistas",
-      "sala_de_procedimientos",
-      "sala_quirúrgica",
-      "área_de_alimentación",
-      "área_de_baño"
-    ],
+    "place": ["área_de_alojamiento","exterior","patio_de_ejercicios","sala_de_procedimientos","sala_quirúrgica","área_de_baño","área_de_alimentación","sala_de_entrevistas"],
     "description": "Equipo de paseo para perros.",
     "associated": ["Perros"],
     "exclusions": ["Gatos", "Roedores", "Serpientes", "Conejos", "Aves"],
-    "state": "libre"
+    "quantity": 6
   },
-
   {
     "name": "Escoba Industrial",
     "place": ["área_de_alojamiento"],
     "description": "Herramienta para la limpieza de áreas comunes del refugio.",
     "associated": ["Voluntario"],
     "exclusions": [],
-    "state": "libre"
+    "quantity": 2
   },
   {
     "name": "Desinfectante",
@@ -163,7 +153,7 @@
     "description": "Solución para la desinfección de superficies y equipos.",
     "associated": ["Voluntario"],
     "exclusions": [],
-    "state": "libre"
+    "quantity": 2
   },
 
   {
@@ -172,7 +162,7 @@
     "description": "Equipo con suministros médicos esenciales para atención primaria.",
     "associated": ["Veterinario"],
     "exclusions": [],
-    "state": "libre"
+    "quantity": 2
   },
   {
     "name": "Instrumental Quirúrgico",
@@ -180,7 +170,7 @@
     "description": "Instrumentos indispensables para realizar cirugías.",
     "associated": ["Veterinario"],
     "exclusions": [],
-    "state": "libre"
+    "quantity": 1
   },
   {
     "name": "Juguetes Interactivos",
@@ -188,16 +178,15 @@
     "description": "Equipo para ejercicio, estimulación y ocio de los animales.",
     "associated": ["Entrenador Certificado"],
     "exclusions": [],
-    "state": "libre"
+    "quantity": 3
   },
-
   {
     "name": "Vasijas de Acero",
     "place": ["área_de_alimentación"],
     "description": "Recipientes de acero para servir alimento y agua.",
     "associated": ["Voluntario"],
     "exclusions": [],
-    "state": "libre"
+    "quantity": 6
   },
   {
     "name": "Toallas Absorbentes",
@@ -205,7 +194,7 @@
     "description": "Toallas para secado y limpieza durante la higiene.",
     "associated": ["Recipiente de Agua"],
     "exclusions": ["Serpientes", "Aves"],
-    "state": "libre"
+    "quantity": 5
   },
   {
     "name": "Recipiente de Agua",
@@ -213,16 +202,15 @@
     "description": "Recipiente para baños, hidratación y enjuague durante la higiene.",
     "associated": [],
     "exclusions": [],
-    "state": "libre"
+    "quantity": 4
   },
-
   {
     "name": "Carpa de Exhibición",
     "place": ["exterior"],
     "description": "Carpa para eventos de adopción y difusión al público.",
     "associated": ["Voluntario", "Folletos Informativos"],
     "exclusions": ["Veterinario", "Entrenador Certificado"],
-    "state": "libre"
+    "quantity": 1
   },
   {
     "name": "Folletos Informativos",
@@ -230,7 +218,7 @@
     "description": "Material impreso para promover la adopción y el cuidado responsable.",
     "associated": ["Carpa de Exhibición"],
     "exclusions": [],
-    "state": "libre"
+    "quantity": 20
   },
   {
     "name": "Bolsas Sanitarias",
@@ -238,78 +226,47 @@
     "description": "Bolsas para recoger excrementos de perros durante el paseo.",
     "associated": ["Voluntarios Paseadores", "Perros"],
     "exclusions": [],
-    "state": "libre"
+    "quantity": 50
   },
-
   {
     "name": "Caja de Transporte",
-    "place": [
-      "área_de_alojamiento",
-      "exterior",
-      "patio_de_ejercicios",
-      "sala_de_entrevistas",
-      "sala_de_procedimientos",
-      "sala_quirúrgica",
-      "área_de_alimentación",
-      "área_de_baño"
-    ],
+    "place": ["área_de_alojamiento","exterior","patio_de_ejercicios","sala_de_procedimientos","sala_quirúrgica","área_de_baño","área_de_alimentación","sala_de_entrevistas"],
     "description": "Transportadora segura para gatos.",
     "associated": ["Gatos"],
     "exclusions": ["Perros", "Roedores", "Serpientes", "Conejos", "Aves"],
-    "state": "libre"
+    "quantity": 2
   },
   {
     "name": "Jaula de Transporte",
-    "place": [
-      "área_de_alojamiento",
-      "exterior",
-      "patio_de_ejercicios",
-      "sala_de_entrevistas",
-      "sala_de_procedimientos",
-      "sala_quirúrgica",
-      "área_de_alimentación",
-      "área_de_baño"
-    ],
+    "place": ["área_de_alojamiento","exterior","patio_de_ejercicios","sala_de_procedimientos","sala_quirúrgica","área_de_baño","área_de_alimentación","sala_de_entrevistas"],
     "description": "Jaula portátil para animales pequeños.",
-    "associated":[],
+    "associated": [],
     "exclusions": ["Perros", "Gatos", "Serpientes"],
-    "state": "libre"
+    "quantity": 3
   },
   {
     "name": "Terrario Especial",
-    "place": [
-      "área_de_alojamiento",
-      "exterior",
-      "patio_de_ejercicios",
-      "sala_de_entrevistas",
-      "sala_de_procedimientos",
-      "sala_quirúrgica",
-      "área_de_alimentación",
-      "área_de_baño"
-    ],
+    "place": ["área_de_alojamiento","exterior","patio_de_ejercicios","sala_de_procedimientos","sala_quirúrgica","área_de_baño","área_de_alimentación","sala_de_entrevistas"],
     "description": "Contenedor seguro y ventilado para serpientes.",
     "associated": ["Serpientes"],
     "exclusions": ["Conejos", "Roedores", "Perros", "Gatos", "Aves"],
-    "state": "libre"
-
+    "quantity": 2
   },
-
   {
     "name": "Vehículo Petmóvil",
     "place": ["exterior"],
     "description": "Vehículo destinado al traslado de animales del refugio.",
     "associated": ["Voluntario"],
     "exclusions": ["Personal de Recepción", "Voluntario de Adopciones"],
-    "state": "libre"
+    "quantity": 1
   },
-
   {
     "name": "Croquetas Premium",
     "place": ["área_de_alimentación"],
     "description": "Alimento balanceado de calidad para perros.",
     "associated": ["Perros"],
     "exclusions": ["Gatos", "Roedores", "Conejos", "Aves", "Serpientes"],
-    "state": "libre"
+    "quantity": 5
   },
   {
     "name": "Carne Congelada",
@@ -317,7 +274,7 @@
     "description": "Presas congeladas listas para descongelar y alimentar serpientes.",
     "associated": ["Serpientes"],
     "exclusions": ["Gatos", "Roedores", "Conejos", "Aves", "Perros"],
-    "state": "libre"
+    "quantity": 3
   },
   {
     "name": "Heno Premium",
@@ -325,7 +282,7 @@
     "description": "Heno de alta calidad como base de la dieta de conejos.",
     "associated": ["Conejos"],
     "exclusions": ["Gatos", "Roedores", "Perros", "Aves", "Serpientes"],
-    "state": "libre"
+    "quantity": 3
   },
   {
     "name": "Mezcla de Semillas",
@@ -333,97 +290,46 @@
     "description": "Mezcla de semillas para aves y roedores.",
     "associated": ["Aves", "Roedores"],
     "exclusions": ["Gatos", "Conejos", "Perros", "Serpientes"],
-    "state": "libre"
+    "quantity": 4
   },
-
   {
     "name": "Perros",
-    "place": [
-      "área_de_alojamiento",
-      "exterior",
-      "patio_de_ejercicios",
-      "sala_de_entrevistas",
-      "sala_de_procedimientos",
-      "sala_quirúrgica",
-      "área_de_alimentación",
-      "área_de_baño"
-    ],
-    "estado": "libre",
+    "place": ["área_de_alojamiento","exterior","patio_de_ejercicios","sala_de_procedimientos","sala_quirúrgica","área_de_baño","área_de_alimentación","sala_de_entrevistas"],
     "description": "Grupo de perros disponibles en el refugio.",
     "associated": ["Correas y Arneses"],
     "exclusions": ["Vacuna Triple Felina", "Vacuna Combinada para Conejos", "Vacuna Preventiva para Roedores", "Vacuna Combinada para Aves"],
-    "state": "libre"
+    "quantity": 6
   },
   {
     "name": "Gatos",
-    "place": [
-      "área_de_alojamiento",
-      "exterior",
-      "patio_de_ejercicios",
-      "sala_de_entrevistas",
-      "sala_de_procedimientos",
-      "sala_quirúrgica",
-      "área_de_alimentación",
-      "área_de_baño"
-    ],
-    "estado": "libre",
+    "place": ["área_de_alojamiento","exterior","patio_de_ejercicios","sala_de_procedimientos","sala_quirúrgica","área_de_baño","área_de_alimentación","sala_de_entrevistas"],
     "description": "Grupo de gatos disponibles en el refugio.",
     "associated": ["Caja de Transporte"],
     "exclusions": ["Vacuna Séxtuple Canina", "Vacuna Combinada para Conejos", "Vacuna Preventiva para Roedores", "Vacuna Combinada para Aves"],
-    "state": "libre"
+    "quantity": 4
   },
   {
     "name": "Conejos",
-    "place": [
-      "área_de_alojamiento",
-      "exterior",
-      "patio_de_ejercicios",
-      "sala_de_entrevistas",
-      "sala_de_procedimientos",
-      "sala_quirúrgica",
-      "área_de_alimentación",
-      "área_de_baño"
-    ],
-    "estado": "libre",
+    "place": ["área_de_alojamiento","exterior","patio_de_ejercicios","sala_de_procedimientos","sala_quirúrgica","área_de_baño","área_de_alimentación","sala_de_entrevistas"],
     "description": "Grupo de conejos disponibles en el refugio.",
     "associated": ["Jaula de Transporte"],
     "exclusions": ["Vacuna Triple Felina", "Vacuna Séxtuple Canina", "Vacuna Preventiva para Roedores", "Vacuna Combinada para Aves"],
-    "state": "libre"
+    "quantity": 3
   },
   {
     "name": "Aves",
-    "place": [
-      "área_de_alojamiento",
-      "exterior",
-      "patio_de_ejercicios",
-      "sala_de_entrevistas",
-      "sala_de_procedimientos",
-      "sala_quirúrgica",
-      "área_de_alimentación",
-      "área_de_baño"
-    ],
-    "estado": "libre",
+    "place": ["área_de_alojamiento","exterior","patio_de_ejercicios","sala_de_procedimientos","sala_quirúrgica","área_de_baño","área_de_alimentación","sala_de_entrevistas"],
     "description": "Grupo de aves disponibles en el refugio.",
     "associated": ["Jaula de Transporte"],
     "exclusions": ["Vacuna Triple Felina", "Vacuna Séxtuple Canina", "Vacuna Combinada para Conejos", "Vacuna Preventiva para Roedores"],
-    "state": "libre"
+    "quantity": 5
   },
   {
     "name": "Serpientes",
-    "place": [
-      "área_de_alojamiento",
-      "exterior",
-      "patio_de_ejercicios",
-      "sala_de_entrevistas",
-      "sala_de_procedimientos",
-      "sala_quirúrgica",
-      "área_de_alimentación",
-      "área_de_baño"
-    ],
-    "estado": "libre",
+    "place": ["área_de_alojamiento","exterior","patio_de_ejercicios","sala_de_procedimientos","sala_quirúrgica","área_de_baño","área_de_alimentación","sala_de_entrevistas"],
     "description": "Grupo de serpientes bajo cuidado especial.",
     "associated": ["Terrario Especial"],
     "exclusions": ["Vacuna Combinada para Aves", "Vacuna Combinada para Conejos", "Vacuna Preventiva para Roedores"],
-    "state": "libre"
+    "quantity": 2
   }
 ]

@@ -31,10 +31,10 @@ class ResourcesScreen(Screen):
             if name in self.selected_resources:
                 for excl in r.get("exclusions", []):
                     if excl in self.selected_resources:
-                        errors.append(f"{name} no puede usarse junto a {excl}")
+                        errors.append(f" {name} no puede usarse junto a {excl}")
                 for assoc in r.get("associated", []):
                     if assoc not in self.selected_resources:
-                        errors.append(f"{name} requiere {assoc}")
+                        errors.append(f" {name} requiere {assoc}")
         return errors
 
     def on_pre_enter(self):
@@ -51,9 +51,9 @@ class ResourcesScreen(Screen):
         )
         root.add_widget(label)
 
-        scroll = ScrollView(
-            size_hint=(1, 0.65),
-            pos_hint={"center_x": 0.5, "center_y": 0.55},
+        scroll_resources = ScrollView(
+            size_hint=(1, 0.55),
+            pos_hint={"center_x": 0.5, "center_y": 0.63},
             do_scroll_x=False,
             do_scroll_y=True,
             bar_width=12,
@@ -79,6 +79,7 @@ class ResourcesScreen(Screen):
             with card.canvas.before:
                 Color(0.6, 1, 0.6, 1) 
                 rr = RoundedRectangle(pos=card.pos, size=card.size, radius=[12])
+
             def update_rr(instance,value,rect=rr,widget=card): 
                 rect.pos = (widget.x+5 ,widget.y+5) 
                 rect.size = (widget.width-10,widget.height-10)
@@ -128,21 +129,45 @@ class ResourcesScreen(Screen):
             grid.add_widget(card)
             self.buttons[r["name"]] = btn
 
-        scroll.add_widget(grid)
-        root.add_widget(scroll)
+        scroll_resources.add_widget(grid)
+        root.add_widget(scroll_resources)
 
-        self.msg_label = Label(
-            text="Seleccionados:",
-            font_size="20sp",
-            pos_hint={"center_x": 0.5, "center_y": 0.2}
+        self.error_scroll = ScrollView(
+            size_hint=(0.70, 0.15),
+            pos_hint={"center_x": 0.5, "center_y": 0.23},
+            do_scroll_x=False,
+            do_scroll_y=True,
+            bar_width=10,
+            bar_color=(0.9, 0.1, 0.1, 1), 
+            scroll_type=['bars']
         )
-        root.add_widget(self.msg_label)
 
-        btn_continue = Button(
-            text="Continuar",
-            size_hint=(0.2, 0.1),
-            pos_hint={"center_x": 0.5, "center_y": 0.1},
-            background_color=(0, 0.5, 0.5, 1)
+        with self.error_scroll.canvas.before: 
+            Color(1, 0.9, 0.9, 0.8)
+            self.error_bg = RoundedRectangle(radius=[10])
+            def update_error_bg(*args):
+                self.error_bg.pos = self.error_scroll.pos
+                self.error_bg.size = self.error_scroll.size
+            self.error_scroll.bind(pos=update_error_bg, size=update_error_bg)
+
+        self.error_box = GridLayout(
+            cols=1,
+            spacing=8,
+            size_hint_y=None,
+            padding=10
+        )
+        self.error_box.bind(minimum_height=self.error_box.setter("height"))
+
+        self.error_scroll.add_widget(self.error_box)
+        root.add_widget(self.error_scroll)
+
+        btn_continue = ImageButton(
+            source="images/check..png",
+            size_hint=(None, None),
+            pos_hint={"center_x": 0.90, "center_y": 0.1},
+            size=(60,60),
+            allow_stretch=True,
+            keep_ratio=True,
         )
         btn_continue.bind(on_press=self.try_continue)
         root.add_widget(btn_continue)
@@ -171,17 +196,35 @@ class ResourcesScreen(Screen):
         else:
             self.selected_resources.remove(name)
             self.buttons[name].color = (1, 1, 1, 1)
+        self.update_errors()
 
+    def update_errors(self):
         errors = self.validate_resources()
-        if errors:
-            self.msg_label.text = "\n".join(errors)
-        else:
-            self.msg_label.text = f"Seleccionados: {', '.join(self.selected_resources)}"
+        self.error_box.clear_widgets()
+        for err in errors:
+            self.error_box.add_widget(Label(
+            text=err,
+            font_size="16sp",
+            color=(0.9, 0.1, 0.1, 1),
+            bold=True,
+            size_hint_y=None,
+            height=30
+        ))
+        Clock.schedule_once(lambda dt: setattr(self.error_scroll, 'scroll_y', 1))
 
     def try_continue(self, instance):
         errors = self.validate_resources()
+        self.error_box.clear_widgets()
         if errors:
-            self.msg_label.text = "\n".join(errors)
+            for err in errors:
+                self.error_box.add_widget(Label(
+                    text=err,
+                    font_size="16sp",
+                    color=(0.9, 0.1, 0.1, 1),  
+                    bold=True,
+                    size_hint_y=None,
+                    height=30
+                ))
             return
         self.manager.selected_resources = self.selected_resources
         self.manager.current = "date"
