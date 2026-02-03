@@ -1,4 +1,5 @@
 import json
+import uuid
 from datetime import datetime, timedelta
 from kivy.uix.screenmanager import Screen
 from kivy.uix.floatlayout import FloatLayout
@@ -188,10 +189,10 @@ class DateScreen(Screen):
 
         self.add_widget(root)
 
-    def show_message(self, text):
+    def show_message(self, text,color=(0.9,0.1,0.1,1)):
         lbl = Label(
             text=text,
-            color=(0.9, 0.1, 0.1, 1),
+            color=color,
             font_size="16sp",
             bold=True,
             size_hint_y=None,
@@ -266,14 +267,18 @@ class DateScreen(Screen):
                 )
             self.show_message(f"Te sugiero realizar tu evento: de {sug_start.strftime('%Y-%m-%d %H:%M')} a {sug_end.strftime('%Y-%m-%d %H:%M')}")
             return
-
-        self.events.append({
-            "start": start.strftime("%Y-%m-%d %H:%M"),
-            "end": end.strftime("%Y-%m-%d %H:%M"),
-            "recurrence": recurrence,
-            "until": until.strftime("%Y-%m-%d") if until else None,
-            "resources": resources
-        })
+        
+        series_id = str(uuid.uuid4())  
+        for occ_start, occ_end in occurrences:
+            self.events.append({
+                "start": occ_start.strftime("%Y-%m-%d %H:%M"),
+                "end": occ_end.strftime("%Y-%m-%d %H:%M"),
+                "recurrence": recurrence,
+                "until": until.strftime("%Y-%m-%d") if until else None,
+                "resources": resources,
+                "place": self.manager.selected_place,
+                "series_id": series_id   
+            })
         save_events(self.events)
         self.show_message("Evento creado exitosamente", color=(0,0.6,0,1))
 

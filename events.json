@@ -1,2 +1,38 @@
 [
+    {
+        "start": "2026-02-01 10:00",
+        "end": "2026-02-01 12:00",
+        "recurrence": "semanal",
+        "until": "2026-02-22",
+        "resources": [
+            "Veterinario",
+            "Kit Médico Básico"
+        ],
+        "place": "sala_quirúrgica",
+        "series_id": "b223cf1b-1347-48b3-b9bd-f9d731233ddc"
+    },
+    {
+        "start": "2026-02-08 10:00",
+        "end": "2026-02-08 12:00",
+        "recurrence": "semanal",
+        "until": "2026-02-22",
+        "resources": [
+            "Veterinario",
+            "Kit Médico Básico"
+        ],
+        "place": "sala_quirúrgica",
+        "series_id": "b223cf1b-1347-48b3-b9bd-f9d731233ddc"
+    },
+    {
+        "start": "2026-02-15 10:00",
+        "end": "2026-02-15 12:00",
+        "recurrence": "semanal",
+        "until": "2026-02-22",
+        "resources": [
+            "Veterinario",
+            "Kit Médico Básico"
+        ],
+        "place": "sala_quirúrgica",
+        "series_id": "b223cf1b-1347-48b3-b9bd-f9d731233ddc"
+    }
 ]
