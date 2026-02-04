@@ -18,6 +18,9 @@ class ImageButton(ButtonBehavior, Image):
     pass
 
 class RecurrenceScreen(Screen):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+
     def on_pre_enter(self):
         self.clear_widgets()
         root = FloatLayout()
@@ -33,6 +36,7 @@ class RecurrenceScreen(Screen):
             pos_hint={"center_x": 0.5, "center_y": 0.9}
         ))
 
+        # Campo para la recurrencia
         self.input_recurrence = TextInput(
             hint_text="Recurrencia (diaria/semanal/mensual)",
             size_hint=(0.5, 0.06),
@@ -42,6 +46,7 @@ class RecurrenceScreen(Screen):
         )
         root.add_widget(self.input_recurrence)
 
+        # Campo para la fecha de finalización
         self.input_until = TextInput(
             hint_text="Repetir hasta (YYYY-MM-DD)",
             size_hint=(0.5, 0.06),
@@ -51,6 +56,7 @@ class RecurrenceScreen(Screen):
         )
         root.add_widget(self.input_until)
 
+        # Scroll para mensajes de error
         self.error_scroll = ScrollView(
             size_hint=(0.8, 0.2),
             pos_hint={"center_x": 0.5, "center_y": 0.3},
@@ -64,9 +70,11 @@ class RecurrenceScreen(Screen):
         with self.error_scroll.canvas.before: 
             Color(1, 0.9, 0.9, 0.8)
             self.error_bg = RoundedRectangle(radius=[10])
+
             def update_error_bg(*args):
                 self.error_bg.pos = self.error_scroll.pos
                 self.error_bg.size = self.error_scroll.size
+
             self.error_scroll.bind(pos=update_error_bg, size=update_error_bg)
 
         self.error_box = GridLayout(
@@ -78,8 +86,10 @@ class RecurrenceScreen(Screen):
         self.error_box.bind(minimum_height=self.error_box.setter("height"))
 
         self.error_scroll.add_widget(self.error_box)
+
         root.add_widget(self.error_scroll)
 
+        # Botón para continuar
         btn_continue = ImageButton(
             source="images/check..png",
             size_hint=(None, None),
@@ -91,6 +101,7 @@ class RecurrenceScreen(Screen):
         btn_continue.bind(on_press=self.process_recurrence)
         root.add_widget(btn_continue)
 
+        # Botón para volver
         def go_back(inst):
             self.manager.current="date"
 
@@ -107,6 +118,7 @@ class RecurrenceScreen(Screen):
 
         self.add_widget(root)
 
+    # Método para mostrar mensajes de error
     def show_message(self, text,color=(0.9,0.1,0.1,1)):
         lbl = Label(
             text=text,
@@ -118,30 +130,38 @@ class RecurrenceScreen(Screen):
         )
         self.error_box.add_widget(lbl)
 
+    # Método para procesar la recurrencia
     def process_recurrence(self, *args):
         self.error_box.clear_widgets()
+
         start = self.manager.temp_start
         end = self.manager.temp_end
         title = self.manager.temp_title
         resources = self.manager.temp_resources
 
-        recurrence = self.input_recurrence.text.strip().lower()
+        recurrence = self.input_recurrence.text.strip().lower() 
         until_text = self.input_until.text.strip()
 
+        # Mostrar mensaje de error si el formato es inválido
         try:
             until = datetime.strptime(until_text, "%Y-%m-%d")
         except:
             self.show_message("Formato inválido para. Use YYYY-MM-DD")
             return
 
+        # Mostrar mensaje de error si la fecha 'Repetir hasta' es inferior a la de fin
         if until.date() < end.date():
             self.show_message("La fecha 'Repetir hasta' debe ser posterior al fin del evento")
             return
 
+        # Mostrar mensaje de error si la recurrencia excede un año
+        if isinstance(start, str): 
+            start = datetime.strptime(start, "%Y-%m-%d %H:%M")
         if (until - start).days > 365:
             self.show_message("Los datos del refugio son restaurados cada año. La recurrencia no puede exceder este tiempo")
             return
 
+        # Determinar el intervalo de recurrencia
         if recurrence == "diaria":
             delta = timedelta(days=1)
         elif recurrence == "semanal":
@@ -154,6 +174,7 @@ class RecurrenceScreen(Screen):
 
         occurrences = []
         current = start
+        # Generar todas las ocurrencias
         while current <= until:
             occurrences.append((current, current + (end - start)))
             current += delta
@@ -162,11 +183,13 @@ class RecurrenceScreen(Screen):
         resources_info = load_resources()
         conflicts = []
 
+        # Verificar conflictos de recursos para cada ocurrencia
         for occ_start, occ_end in occurrences:
             sug_start, sug_end, occupied = resources_available(occ_start, occ_end, resources, resources_info, events)
             if sug_start != occ_start or sug_end != occ_end:
                 conflicts.append((occ_start, occ_end, sug_start, sug_end, occupied))
 
+        # Si hay conflictos, mostrar sugerencias
         if conflicts:
             for occ_start, occ_end, sug_start, sug_end, occupied in conflicts:
                 text_resources='\n'.join(occupied)
@@ -174,10 +197,13 @@ class RecurrenceScreen(Screen):
                     f"En la fecha de {occ_start.strftime('%Y-%m-%d %H:%M')} a {occ_end.strftime('%Y-%m-%d %H:%M')} "
                     f"Estos recursos se encuentran ocupados:\n{text_resources}\n"
                 )
+                self.show_message("")
             self.show_message(f"Te sugiero realizar tu evento: de {sug_start.strftime('%Y-%m-%d %H:%M')} a {sug_end.strftime('%Y-%m-%d %H:%M')}")
             return
 
-        series_id = str(uuid.uuid4())
+        series_id = str(uuid.uuid4()) # Generar un ID único para la serie
+
+        # Agregar eventos al json
         for occ_start, occ_end in occurrences:
             events.append({
                 "title": title,
@@ -189,6 +215,6 @@ class RecurrenceScreen(Screen):
                 "place": self.manager.selected_place,
                 "series_id": series_id
             })
-
         save_events(events)
+        
         self.show_message("Evento recurrente creado exitosamente", color=(0, 0.6, 0, 1))

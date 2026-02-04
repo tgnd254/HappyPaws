@@ -1,98 +1,186 @@
+
 # 🐾 Planificador de Eventos para Refugios Animales
 
-Un sistema pensado para facilitar la organización interna de un refugio animal. Cada recurso importa: la aplicación ayuda a planificar actividades, validar disponibilidad y prevenir conflictos, favoreciendo así el bienestar animal y la adopción responsable.
+**Autora:** *Estefanía Delgado Marqués*  
+**Mensaje:** *Adopten!*  
+**Dedicatoria:** *A mi gatito Shiro. Te extraño inmensamente*  
+
+Un sistema diseñado para apoyar la organización interna de un refugio animal, donde cada recurso importa y cada decisión impacta directamente en el bienestar de los animales.  
+Este proyecto facilita la planificación de actividades, garantiza el uso seguro y coherente de los recursos y contribuye a la misión más importante: **promover la adopción responsable**.
 
 ---
 
-## Índice
+# 🌟 Descripción General
 
-- [Descripción](#descripción)
-- [Características principales](#características-principales)
-- [Eventos, recursos y restricciones](#eventos-recursos-y-restricciones)
-- [Interfaz (guía rápida)](#interfaz-guía-rápida)
-- [Estructura del proyecto](#estructura-del-proyecto)
-- [Instalación y ejecución](#instalación-y-ejecución)
-- [Dependencias](#dependencias)
-- [Autor y dedicatoria](#autor-y-dedicatoria)
+La aplicación permite crear, visualizar y gestionar eventos dentro de un refugio animal, considerando:
 
----
+- Disponibilidad real de recursos  
+- Restricciones por especie, rol o lugar  
+- Validación automática de conflictos  
+- Programación de eventos simples o recurrentes  
+- Eliminación individual o por series  
 
-## Descripción
-
-La aplicación permite crear, visualizar y gestionar eventos en un refugio animal teniendo en cuenta:
-
-- Disponibilidad real de recursos (personas, insumos, equipamiento, animales).
-- Reglas de co‑requisitos y exclusiones entre recursos.
-- Validación de solapamientos y disponibilidad por cantidad.
-- Creación de eventos simples y recurrentes (serie de eventos).
-
-Todo esto mediante una interfaz gráfica construida con Kivy, diseñada para ser clara e intuitiva.
+Todo mediante una interfaz gráfica construida con **Kivy**, intuitiva y visual.
 
 ---
 
-## Características principales
+# 🗓️ Eventos, Recursos y Restricciones
 
-1. Crear eventos con título, lugar, recursos y ventana de tiempo.
-2. Validación automática de conflictos (recursos, fechas, exclusiones).
-3. Programación de recurrencias: diarias, semanales y mensuales.
-4. Eliminación inteligente: instancia única o toda la serie.
-5. Persistencia en archivos JSON: `data/events.json` y `data/resources.json`.
-6. Gestión visual de recursos (cantidades, asociados y exclusiones).
-
----
-
-## Eventos, recursos y restricciones
-
-### Eventos
+## Eventos
 Cada evento incluye:
 
-- Título
-- Fecha y hora de inicio y fin
-- Lugar
-- Recursos necesarios
-- Recurrencia (opcional)
+- Título  
+- Fecha y hora de inicio y fin  
+- Lugar  
+- Recursos necesarios  
+- Recurrencia (opcional)  
 
-### Recursos
-Los recursos representan personal, insumos, herramientas, animales y equipos.
-Se definen con:
+El sistema valida automáticamente que los recursos estén disponibles y que no existan conflictos.
 
-- Cantidad disponible
-- Recursos asociados (co‑requisitos)
-- Exclusiones (incompatibilidades)
-- Lugares permitidos
+### Ejemplos de eventos
+- Vacunación mensual preventiva  
+- Feria de adopción  
+- Aseo y limpieza del refugio  
+- Entrenamiento canino  
+- Rescate y traslado de animales  
+- Entrevistas de adopción  
 
+---
+
+## Recursos
+Los recursos representan personal, insumos, herramientas, animales y equipos del refugio.  
+Cada recurso tiene:
+
+- Cantidad disponible  
+- Recursos asociados (co‑requisitos)  
+- Exclusiones (incompatibilidades)  
+- Lugares permitidos  
+
+### Ejemplos de lógica de recursos
+- **Veterinario** → asociado a Kit Médico Básico; excluye Entrenador Certificado  
+- **Vacunas** → asociadas a su especie; excluyen todas las demás  
+- **Voluntario de Adopciones** → asociado a Cámara Digital; excluye Voluntario normal  
+- **Carpa de Exhibición** → asociada a Voluntario y Folletos; excluye Veterinario  
+- **Vehículo Petmóvil** → asociado a Voluntario; excluye Personal de Recepción  
+
+---
+
+## 🔒 Restricciones del Sistema
+
+### ✔️ Co‑requisitos
+Un recurso requiere otro para funcionar.  
 Ejemplos:
-- Veterinario (asocia: Kit Médico Básico; excluye: Entrenador Certificado)
-- Vacuna (asociada a especie y veterinario)
-- Voluntario de Adopciones (asocia: Cámara Digital; excluye: Voluntario normal)
+
+- Vacuna Séxtuple Canina → Veterinario + Perros  
+- Cámara Digital → Voluntario de Adopciones  
+- Entrenador Certificado → Juguetes Interactivos  
+
+### ❌ Exclusiones
+Dos recursos no pueden coexistir en el mismo evento.  
+Ejemplos:
+
+- Veterinario ❌ Entrenador Certificado  
+- Voluntario ❌ Voluntario de Adopciones  
+- Vacuna Felina ❌ Perros  
+- Carpa de Exhibición ❌ Veterinario  
 
 ---
 
-## Interfaz (guía rápida)
+# ⚙️ Funcionalidades Principales
 
-- Pantalla principal: Crear evento / Ver eventos creados.
-- Selección de lugar: grid con imágenes por área.
-- Selección de recursos: lista con selección múltiple y validaciones.
-- Fecha y hora: campos para inicio/fin y validación en tiempo real.
-- Recurrencia: popup para configurar tipo y límite de fechas.
-- Listado de eventos: tarjetas con botones de detalles y eliminación.
+### 🏠 Pantalla de Inicio
+- Crear un nuevo evento  
+- Ver eventos creados  
+
+### 📍 Selección del Lugar
+El usuario elige dónde ocurrirá el evento.
+
+### 🧰 Selección de Recursos
+El usuario selecciona los recursos necesarios.  
+Se aplican reglas de asociados y exclusiones.
+
+### ⏰ Fecha y Hora
+El sistema valida:
+
+- Disponibilidad  
+- Solapamientos  
+- Exclusiones  
+- Asociaciones obligatorias  
+
+Si hay conflicto, se sugiere un horario alternativo.
+
+### 🔁 Recurrencia
+Eventos diarios, semanales o mensuales.  
+Cada ocurrencia se valida individualmente.
+
+### 📋 Listado de Eventos
+Tarjetas visuales con:
+
+- Título  
+- Imagen del lugar  
+- Detalles  
+- Eliminación  
+
+### 🗑️ Eliminación Inteligente
+- Eliminar solo una ocurrencia  
+- O toda la serie  
+
+### 🔎 Detalles del Evento
+Incluye:
+
+- Inicio y fin  
+- Recursos  
+- Recurrencia  
+- Lugar  
+- Identificador de serie  
+
+### 💾 Persistencia
+Datos guardados en:
+
+- `data/events.json`  
+- `data/resources.json`  
 
 ---
 
-## Estructura del proyecto
+# 🖼️ Guía de la Interfaz
 
+### Pantalla de Inicio
+Botones grandes y visuales para crear o ver eventos.
+
+### Pantalla de Lugar
+Grid con imágenes de cada área del refugio.
+
+### Pantalla de Recursos
+Lista de recursos seleccionables.
+
+### Pantalla de Fecha y Hora
+Validación automática y mensajes claros.
+
+### Pantalla de Recurrencia
+Configuración de patrones repetitivos.
+
+### Pantalla de Eventos Creados
+Tarjetas con detalles y opciones de eliminación.
+
+---
+
+# 🌳 Árbol de Directorios
+
+```txt
 Planificador-de-Eventos/
-
-```
 ├── data/
 │   ├── events.json
 │   └── resources.json
+│
 ├── fonts/
 │   └── (tipografías .ttf usadas en la interfaz)
+│
 ├── images/
 │   └── (iconos, fondos y botones de la aplicación)
+│
 ├── .gitignore
 ├── requirements.txt
+│
 ├── main.py
 ├── place.py
 ├── resources.py
@@ -101,7 +189,6 @@ Planificador-de-Eventos/
 └── events.py
 ```
 
----
 
 ## Instalación y ejecución
 
@@ -167,15 +254,3 @@ Las dependencias principales están en `requirements.txt`. La aplicación se des
 - Para eliminar, abrir detalles y elegir eliminar sólo la ocurrencia o la serie completa.
 
 ---
-
-## Autor y dedicatoria
-
-Autora: Estefanía Delgado Marqués
-
-¡Adopten! 🐶🐱
-
-Dedicatoria: A mi gatito Shiro — te extraño inmensamente.
-
----
-
-Si quieres que ajuste el tono, el idioma o añada ejemplos visuales (capturas o GIF), indícalo y lo incorporo antes de hacer el commit final del README.

@@ -30,6 +30,7 @@ class EventsScreen(Screen):
     def __init__(self, **kwargs): 
         super().__init__(**kwargs) 
         self.events = load_events()
+
     def on_pre_enter(self):
         self.events = load_events()
         self.clear_widgets()
@@ -46,6 +47,7 @@ class EventsScreen(Screen):
             pos_hint={"center_x": 0.5, "center_y": 0.95})
         root.add_widget(label)
 
+        # ScrollView para la lista de eventos
         scroll = ScrollView(
             size_hint=(0.95, 0.8), 
             pos_hint={"center_x":0.5, "center_y":0.5},
@@ -55,33 +57,39 @@ class EventsScreen(Screen):
             bar_color=(0,0.5,0.5,1), 
             scroll_type=['bars']
         ) 
+
         layout = GridLayout(cols=8, spacing=20, padding=40, size_hint_y=None, row_default_height=350, row_force_default=True) 
         layout.bind(minimum_height=layout.setter("height"))
 
+        # Añadir eventos a la lista
         for idx, ev in enumerate(self.events):
             box = BoxLayout(orientation="vertical", size_hint=(None,None), width=200, height=300, spacing=5, padding=5)
             place=ev["place"]
 
-            lbl = Label( 
-                text=ev["title"], 
-                font_size="22sp", 
-                bold=True, 
-                color=(0, 0.3, 0, 1),  
-                halign="center", 
-                valign="middle", 
-                size_hint_y=None, 
-                height=60, 
-                text_size=(180, None) 
+            # Etiqueta del título del evento
+            lbl = Label(
+                text=ev["title"],
+                font_size="22sp",
+                bold=True,
+                color=(0, 0.3, 0, 1),
+                halign="center",
+                valign="middle",
+                size_hint_y=None,
+                height=60,
+                text_size=(180, None)
             )
             box.add_widget(lbl)
-            
+
+            # Imagen del lugar
             img = Image(source=f"images/{place}.png",allow_stretch=True, keep_ratio=False,size=(150,150))
             box.add_widget(img)
 
+            # Botón para ver detalles del evento
             btn_details = Button(text="Ver detalles", size_hint_y=None, height=40,background_color=(0.6, 1, 0.6, 1),color=(1, 0.992, 0.815, 1))
             btn_details.bind(on_press=lambda inst, i=idx: self.show_details(i))
             box.add_widget(btn_details)
 
+            # Botón para eliminar el evento
             btn_delete = Button(text="Eliminar", size_hint_y=None, height=40,background_color=(0.6, 1, 0.6, 1),color=(1, 0.992, 0.815, 1))
             btn_delete.bind(on_press=lambda inst, i=idx: self.confirm_delete(i))
             box.add_widget(btn_delete)
@@ -89,8 +97,10 @@ class EventsScreen(Screen):
             layout.add_widget(box)
 
         scroll.add_widget(layout)
+
         root.add_widget(scroll)
 
+        # Botón para volver a la pantalla principal
         def go_back(inst):
             self.manager.current="home"
 
@@ -107,6 +117,7 @@ class EventsScreen(Screen):
 
         self.add_widget(root)
 
+    # Función para confirmar la eliminación de un evento
     def confirm_delete(self, index):
         event = self.events[index]
         series_id = event.get("series_id", None)
@@ -119,9 +130,11 @@ class EventsScreen(Screen):
             font_size="25sp",
             bold=True,
             color=(0, 0.5, 0.5, 1)
-
         )
+        content.add_widget(lbl)
+
         btns = BoxLayout(spacing=20, size_hint_y=None, height=40,width=30)
+
         btn_all = Button(
             text="Sí, todas", 
             background_color=(0.6, 1, 0.6, 1), 
@@ -130,6 +143,8 @@ class EventsScreen(Screen):
             bold=True, 
             font_size=20
         )
+        btns.add_widget(btn_all)
+
         btn_one = Button(
             text="No, solo esta", 
             background_color=(0.6, 1, 0.6, 1), 
@@ -138,6 +153,8 @@ class EventsScreen(Screen):
             bold=True, 
             font_size=20
         )
+        btns.add_widget(btn_one)
+
         btn_cancel = Button(
             text="Cancelar", 
             background_color=(0.6, 1, 0.6, 1), 
@@ -146,10 +163,8 @@ class EventsScreen(Screen):
             bold=True, 
             font_size=20
         )
-        btns.add_widget(btn_all)
-        btns.add_widget(btn_one)
         btns.add_widget(btn_cancel)
-        content.add_widget(lbl)
+        
         content.add_widget(btns)
 
         popup = Popup(
@@ -168,20 +183,24 @@ class EventsScreen(Screen):
 
         popup.open()
 
+    # Función para eliminar un evento solamente
     def delete_event(self, index, popup):
         del self.events[index]
         save_events(self.events)
         popup.dismiss()
-        self.on_pre_enter()  
+        self.on_pre_enter()
 
+    # Función para eliminar una serie de eventos
     def delete_series(self, series_id, popup):
         self.events = [ev for ev in self.events if ev.get("series_id") != series_id]
         save_events(self.events)
         popup.dismiss()
         self.on_pre_enter()
 
+    # Función para mostrar los detalles de un evento
     def show_details(self,index):
         event = self.events[index]
+
         scroll = ScrollView(
             size_hint=(1,1), 
             do_scroll_x=False,
@@ -190,6 +209,7 @@ class EventsScreen(Screen):
             bar_color=(0,0.5,0.5,1), 
             scroll_type=['bars']
         ) 
+
         content = BoxLayout( 
             orientation="vertical", 
             spacing=18, 
@@ -198,24 +218,27 @@ class EventsScreen(Screen):
             size_hint_x=1,
         ) 
         content.bind(minimum_height=content.setter("height"))
+
         start = event.get("start", "—") 
         end = event.get("end", "—") 
         resources = event.get("resources", []) 
         recurrence = event.get("recurrence", "No recurrente")
-        
-        content.add_widget(Label( 
-            text=f"Inicio: {start}\nFin: {end}", 
-            bold=True, 
-            font_name="fonts/ELEPHNT.TTF", 
-            font_size="20sp", 
-            color=(0, 0.5, 0.5, 1), 
+
+        # Etiqueta con la fecha de inicio y fin del evento
+        content.add_widget(Label(
+            text=f"Inicio: {start}\nFin: {end}",
+            bold=True,
+            font_name="fonts/ELEPHNT.TTF",
+            font_size="20sp",
+            color=(0, 0.5, 0.5, 1),
             size_hint_y=None,
             valign="middle", 
             size_hint_x=1, 
             text_size=(390, None),
             height=60 
         )) 
-        
+
+        # Etiqueta con los recursos del evento
         recursos_text = "Recursos:\n" + "\n".join(f"- {r}" for r in resources)
         content.add_widget(Label(
             text=recursos_text,
@@ -230,34 +253,37 @@ class EventsScreen(Screen):
             text_size=(390, None)  
         ))
 
-        
-        content.add_widget(Label( 
-            text=f"Recurrencia: {recurrence}", 
-            bold=True, 
-            font_name="fonts/ELEPHNT.TTF", 
-            font_size="20sp", 
-            color=(0, 0.5, 0.5, 1), 
-            size_hint_y=None, 
-            valign="middle", 
-            size_hint_x=1, 
+        # Etiqueta con la recurrencia del evento
+        content.add_widget(Label(
+            text=f"Recurrencia: {recurrence}",
+            bold=True,
+            font_name="fonts/ELEPHNT.TTF",
+            font_size="20sp",
+            color=(0, 0.5, 0.5, 1),
+            size_hint_y=None,
+            valign="middle",
+            size_hint_x=1,
             text_size=(390, None),
             height=40 
         )) 
 
         content.add_widget(Label(text=""))
 
-        btn_close = Button( 
-            text="Cerrar", 
-            background_color=(0.6, 1, 0.6, 1), 
-            color=(1, 0.992, 0.815, 1), 
-            font_name="fonts/ELEPHNT", 
-            bold=True, 
+        # Botón para cerrar el popup
+        btn_close = Button(
+            text="Cerrar",
+            background_color=(0.6, 1, 0.6, 1),
+            color=(1, 0.992, 0.815, 1),
+            font_name="fonts/ELEPHNT",
+            bold=True,
             font_size=20,
             width=100,
             size_hint=(1, 0.5)
         ) 
         content.add_widget(btn_close) 
+
         scroll.add_widget(content) 
+
         popup = Popup( 
             title="", 
             content=scroll, 
@@ -268,6 +294,7 @@ class EventsScreen(Screen):
             background_color=(1, 0.992, 0.815, 1) 
         ) 
         btn_close.bind(on_press=popup.dismiss) 
+        
         popup.open()
         
 
