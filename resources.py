@@ -18,8 +18,8 @@ class ResourcesScreen(Screen):
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        # Cargar recursos desde JSON
-        with open("resources.json", "r", encoding="utf-8") as f:
+        
+        with open("data/resources.json", "r", encoding="utf-8") as f:
             self.resources = json.load(f)
         self.selected_resources = []
         self.buttons = {}

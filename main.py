@@ -9,6 +9,7 @@ from place import PlaceScreen
 from resources import ResourcesScreen
 from date import DateScreen
 from events import EventsScreen
+from recurrence import RecurrenceScreen
 
 class ImageButton(ButtonBehavior, Image): 
     pass
@@ -40,6 +41,7 @@ class FirstWindow(App):
         sm.add_widget(ResourcesScreen(name="resources"))
         sm.add_widget(DateScreen(name="date"))
         sm.add_widget(EventsScreen(name="events"))
+        sm.add_widget(RecurrenceScreen(name="recurrence"))
         sm.current="home"
         return sm
         

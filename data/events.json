@@ -1,0 +1,116 @@
+[
+    {
+        "title": "vacunacion",
+        "start": "2026-02-02 10:00",
+        "end": "2026-02-02 12:00",
+        "recurrence": "ninguna",
+        "resources": [
+            "Veterinario",
+            "Kit Médico Básico"
+        ],
+        "place": "sala_quirúrgica",
+        "series_id": null
+    },
+    {
+        "title": "vacunacion",
+        "start": "2026-02-02 12:00",
+        "end": "2026-02-03 12:00",
+        "recurrence": "ninguna",
+        "resources": [
+            "Veterinario",
+            "Kit Médico Básico"
+        ],
+        "place": "sala_quirúrgica",
+        "series_id": null
+    },
+    {
+        "title": "vacunacion",
+        "start": "2026-02-03 13:00",
+        "end": "2026-02-03 14:00",
+        "recurrence": "diaria",
+        "until": "2026-02-09",
+        "resources": [
+            "Veterinario",
+            "Kit Médico Básico"
+        ],
+        "place": "sala_quirúrgica",
+        "series_id": "b6d40e69-345f-4a08-b8f0-f9a33007e886"
+    },
+    {
+        "title": "vacunacion",
+        "start": "2026-02-04 13:00",
+        "end": "2026-02-04 14:00",
+        "recurrence": "diaria",
+        "until": "2026-02-09",
+        "resources": [
+            "Veterinario",
+            "Kit Médico Básico"
+        ],
+        "place": "sala_quirúrgica",
+        "series_id": "b6d40e69-345f-4a08-b8f0-f9a33007e886"
+    },
+    {
+        "title": "vacunacion",
+        "start": "2026-02-05 13:00",
+        "end": "2026-02-05 14:00",
+        "recurrence": "diaria",
+        "until": "2026-02-09",
+        "resources": [
+            "Veterinario",
+            "Kit Médico Básico"
+        ],
+        "place": "sala_quirúrgica",
+        "series_id": "b6d40e69-345f-4a08-b8f0-f9a33007e886"
+    },
+    {
+        "title": "vacunacion",
+        "start": "2026-02-06 13:00",
+        "end": "2026-02-06 14:00",
+        "recurrence": "diaria",
+        "until": "2026-02-09",
+        "resources": [
+            "Veterinario",
+            "Kit Médico Básico"
+        ],
+        "place": "sala_quirúrgica",
+        "series_id": "b6d40e69-345f-4a08-b8f0-f9a33007e886"
+    },
+    {
+        "title": "vacunacion",
+        "start": "2026-02-07 13:00",
+        "end": "2026-02-07 14:00",
+        "recurrence": "diaria",
+        "until": "2026-02-09",
+        "resources": [
+            "Veterinario",
+            "Kit Médico Básico"
+        ],
+        "place": "sala_quirúrgica",
+        "series_id": "b6d40e69-345f-4a08-b8f0-f9a33007e886"
+    },
+    {
+        "title": "vacunacion",
+        "start": "2026-02-08 13:00",
+        "end": "2026-02-08 14:00",
+        "recurrence": "diaria",
+        "until": "2026-02-09",
+        "resources": [
+            "Veterinario",
+            "Kit Médico Básico"
+        ],
+        "place": "sala_quirúrgica",
+        "series_id": "b6d40e69-345f-4a08-b8f0-f9a33007e886"
+    },
+    {
+        "title": "Vacunacion",
+        "start": "2026-02-08 14:00",
+        "end": "2026-02-08 16:00",
+        "recurrence": "ninguna",
+        "resources": [
+            "Veterinario",
+            "Kit Médico Básico"
+        ],
+        "place": "sala_quirúrgica",
+        "series_id": null
+    }
+]
