@@ -80,7 +80,7 @@ class ResourcesScreen(Screen):
             # Crear tarjeta para el recurso
             card = BoxLayout(
                 orientation="horizontal",
-                height=170,
+                height=305,
                 spacing=40,
                 size_hint=(1, None),
                 padding=(10,10)
@@ -96,13 +96,14 @@ class ResourcesScreen(Screen):
             card.bind(pos=update_rr, size=update_rr)
 
             Clock.schedule_once(lambda dt: update_rr(card,None), 0)
-
+            
             # Mostrar imagen de los recursos
             btn = ImageButton(
-                source="images/" + r["name"] + ".png",
+                source="images/" + r["name"].lower().replace(" ", "_")+ ".png",
+                mipmap=True,
                 size_hint=(None, None),
-                size=(150, 150),
-                allow_stretch=True,
+                size=(300, 300),
+                allow_stretch=False,
                 keep_ratio=True
             )
             btn.resource = r
@@ -113,7 +114,7 @@ class ResourcesScreen(Screen):
 
             name_label = Label(
                 text=r["name"],
-                font_size="18sp",
+                font_size="25sp",
                 bold=True,
                 color=(0.2078, 0.4980, 0.7294, 1),
                 halign="left",
@@ -125,7 +126,7 @@ class ResourcesScreen(Screen):
 
             desc_label = Label(
                 text=r.get("description", ""),
-                font_size="16sp",
+                font_size="23sp",
                 color=(0.2078, 0.4980, 0.7294, 1),
                 halign="left",
                 valign="top",

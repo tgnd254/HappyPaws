@@ -60,7 +60,7 @@
     "name": "Sedantes (Xilazina)",
     "place": ["sala_de_procedimientos", "exterior"],
     "description": "Sedante veterinario utilizado en rescates y traslados de animales nerviosos.",
-    "associated": ["Veterinario"],
+    "associated": [],
     "exclusions": ["Entrenador Certificado", "Juguetes Interactivos"],
     "quantity": 3
   },
@@ -77,7 +77,7 @@
     "name": "Voluntario",
     "place": ["exterior", "área_de_alojamiento","área_de_alimentación"],
     "description": "Persona que apoya en tareas generales del refugio.",
-    "associated": ["Escoba Industrial", "Desinfectante"],
+    "associated": [],
     "exclusions": ["Voluntario de Adopciones", "Personal de Recepción"],
     "quantity": 4
   },
@@ -107,7 +107,7 @@
   },
   {
     "name": "Personal de Recepción",
-    "place": ["sala_de_entrevistas"],
+    "place": ["sala_de_entrevistas","exterior"],
     "description": "Encargado de la atención al público y de abrir el refugio.",
     "associated": ["Llaves del Refugio"],
     "exclusions": ["Voluntario"],
@@ -329,7 +329,15 @@
     "place": ["área_de_alojamiento","exterior","patio_de_ejercicios","sala_de_procedimientos","sala_quirúrgica","área_de_baño","área_de_alimentación","sala_de_entrevistas"],
     "description": "Grupo de serpientes bajo cuidado especial.",
     "associated": ["Terrario Especial"],
-    "exclusions": ["Vacuna Combinada para Aves", "Vacuna Combinada para Conejos", "Vacuna Preventiva para Roedores"],
+    "exclusions": ["Vacuna Combinada para Aves", "Vacuna Combinada para Conejos", "Vacuna Preventiva para Roedores","Vacuna Triple Felina", "Vacuna Séxtuple Canina"],
     "quantity": 2
+  },
+  {
+    "name": "Roedores",
+    "place": ["área_de_alojamiento","exterior","patio_de_ejercicios","sala_de_procedimientos","sala_quirúrgica","área_de_baño","área_de_alimentación","sala_de_entrevistas"],
+    "description": "Grupo de roedores disponibles en el refugio.",
+    "associated": ["Jaula de transporte"],
+    "exclusions": ["Vacuna Combinada para Aves", "Vacuna Combinada para Conejos", "Vacuna Triple Felina", "Vacuna Séxtuple Canina"],
+    "quantity": 4
   }
 ]

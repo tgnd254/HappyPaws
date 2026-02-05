@@ -81,7 +81,7 @@ class EventsScreen(Screen):
             box.add_widget(lbl)
 
             # Imagen del lugar
-            img = Image(source=f"images/{place}.png",allow_stretch=True, keep_ratio=False,size=(150,150))
+            img = Image(source=f"images/{place}.png",allow_stretch=True,mipmap=True, keep_ratio=False,size=(150,150))
             box.add_widget(img)
 
             # Botón para ver detalles del evento
@@ -127,7 +127,7 @@ class EventsScreen(Screen):
         lbl = Label(
             text="¿Desea eliminar todas las ocurrencias de este evento?",
             font_name="fonts/ELEPHNT",
-            font_size="25sp",
+            font_size="23sp",
             bold=True,
             color=(0, 0.5, 0.5, 1)
         )
@@ -170,7 +170,7 @@ class EventsScreen(Screen):
         popup = Popup(
             title="",
             content=content,
-            size_hint=(0.7, 0.3),
+            size_hint=(0.8, 0.3),
             auto_dismiss=False,
             background="",
             background_color=(1, 0.992, 0.815, 1),
@@ -269,31 +269,37 @@ class EventsScreen(Screen):
 
         content.add_widget(Label(text=""))
 
-        # Botón para cerrar el popup
-        btn_close = Button(
-            text="Cerrar",
-            background_color=(0.6, 1, 0.6, 1),
-            color=(1, 0.992, 0.815, 1),
-            font_name="fonts/ELEPHNT",
-            bold=True,
-            font_size=20,
-            width=100,
-            size_hint=(1, 0.5)
-        ) 
-        content.add_widget(btn_close) 
-
         scroll.add_widget(content) 
 
         popup = Popup( 
             title="", 
             content=scroll, 
-            size_hint=(0.3, 0.2),
+            size_hint=(0.7, 0.2),
             auto_dismiss=False, 
             background="", 
             separator_color=(1, 0.992, 0.815, 1),
             background_color=(1, 0.992, 0.815, 1) 
         ) 
-        btn_close.bind(on_press=popup.dismiss) 
+        
+        # Botón para cerrar el popup
+        btn_close = Button(
+            text="Cerrar", 
+            background_color=(0.6, 1, 0.6, 1), 
+            color=(1, 0.992, 0.815, 1), 
+            font_name="fonts/ELEPHNT", 
+            bold=True, 
+            font_size=20
+        )
+        # Caja para centrar el botón abajo 
+        btn_box = BoxLayout( 
+            orientation="vertical", 
+            size_hint_y=None, 
+            height=70, 
+            padding=[0, 10, 0, 0] 
+        ) 
+        btn_box.add_widget(btn_close) 
+        content.add_widget(btn_box) 
+        btn_close.bind(on_press=lambda inst: popup.dismiss())
         
         popup.open()
         

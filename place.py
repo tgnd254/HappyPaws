@@ -28,8 +28,8 @@ class PlaceScreen(Screen):
             ("sala_quirúrgica"), 
             ("sala_de_entrevistas"), 
             ("área_de_alojamiento"), 
-            ("área_de_alimentacion"), 
-            ("área_de_bano"), 
+            ("área_de_alimentación"), 
+            ("área_de_baño"), 
             ("patio_de_ejercicios"), 
             ("exterior")
         ] 
@@ -45,6 +45,7 @@ class PlaceScreen(Screen):
                 source="images/"+name+".png",
                 allow_stretch=False,
                 keep_ratio=True,
+                mipmap=True,
                 size_hint=(0.20, 0.20),
                 pos_hint={"center_x":x_pos,"center_y":y_pos}
             )
