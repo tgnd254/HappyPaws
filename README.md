@@ -3,7 +3,7 @@
 
 **Autora:** *Estefanía Delgado Marqués*  
 **Mensaje:** *Adopten!*  
-**Dedicatoria:** *A mi gatito Shiro. Te extraño inmensamente*  
+**Dedicatoria:** *A mi gatito Shiro y a mi perrita Susi. Los extraño inmensamente*  
 
 Un sistema diseñado para apoyar la organización interna de un refugio animal, donde cada recurso importa y cada decisión impacta directamente en el bienestar de los animales.  
 Este proyecto facilita la planificación de actividades, garantiza el uso seguro y coherente de los recursos y contribuye a la misión más importante: **promover la adopción responsable**.
