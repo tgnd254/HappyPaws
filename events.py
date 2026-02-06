@@ -11,6 +11,7 @@ from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.image import Image
 from kivy.uix.behaviors import ButtonBehavior
 from kivy.graphics import Color, RoundedRectangle
+from kivy.clock import Clock
 
 class ImageButton(ButtonBehavior, Image): 
     pass
@@ -25,6 +26,39 @@ def load_events():
 def save_events(events):
     with open("data/events.json", "w", encoding="utf-8") as f:
         json.dump(events, f, indent=4, ensure_ascii=False)
+
+class RoundedButton(Button): 
+    def __init__(self, **kwargs): 
+        super().__init__(**kwargs) 
+        self.background_normal = "" 
+        self.background_down = "" 
+        self.bg_color = kwargs.get("background_color", (0.251, 0.765, 0.851, 1))
+        self.background_color=(0,0,0,0)
+        with self.canvas.before: 
+            Color(*self.bg_color) 
+            self.rect = RoundedRectangle(pos=self.pos, size=self.size, radius=[12]) 
+        self.bind(pos=self.update_rect, size=self.update_rect)
+
+    def update_rect(self, *args): 
+        self.rect.pos = self.pos 
+        self.rect.size = self.size
+
+class RoundedBox(BoxLayout): 
+    def __init__(self, **kwargs): 
+        super().__init__(**kwargs) 
+        self.padding = 10 
+        self.spacing = 10 
+        with self.canvas.before: 
+            Color(1.0, 0.976, 0.769, 1)
+            self.border = RoundedRectangle(pos=self.pos, size=self.size, radius=[12]) 
+            Color(1.0, 0.992, 0.906, 1)
+            self.bg = RoundedRectangle(pos=(self.x+3, self.y+3), size=(self.width-6, self.height-6), radius=[10]) 
+        self.bind(pos=self.update_rects, size=self.update_rects)
+    def update_rects(self, *args): 
+        self.border.pos = self.pos 
+        self.border.size = self.size 
+        self.bg.pos = (self.x+3, self.y+3) 
+        self.bg.size = (self.width-6, self.height-6)
 
 class EventsScreen(Screen):
     def __init__(self, **kwargs): 
@@ -41,9 +75,9 @@ class EventsScreen(Screen):
 
         label=Label(
             text="Eventos Creados",
-            color=(0, 0.5, 0.5, 1),
-            font_name="fonts/SHOWG.TTF",
-            font_size="30sp",
+            color=(0.251, 0.765, 0.851, 1),
+            font_name="fonts/poppins-bold.ttf",
+            font_size="40sp",
             pos_hint={"center_x": 0.5, "center_y": 0.95})
         root.add_widget(label)
 
@@ -58,44 +92,60 @@ class EventsScreen(Screen):
             scroll_type=['bars']
         ) 
 
-        layout = GridLayout(cols=8, spacing=20, padding=40, size_hint_y=None, row_default_height=350, row_force_default=True) 
+        layout = GridLayout( cols=1, spacing=10, padding=20, size_hint_y=None ) 
         layout.bind(minimum_height=layout.setter("height"))
 
-        # Añadir eventos a la lista
         for idx, ev in enumerate(self.events):
-            box = BoxLayout(orientation="vertical", size_hint=(None,None), width=200, height=300, spacing=5, padding=5)
-            place=ev["place"]
-
-            # Etiqueta del título del evento
+            # Contenedor horizontal para cada evento
+            row = RoundedBox(orientation="horizontal", size_hint_y=None, height=80)
+            # Nombre del evento 
             lbl = Label(
                 text=ev["title"],
-                font_size="22sp",
-                bold=True,
-                color=(0, 0.3, 0, 1),
-                halign="center",
+                font_size="20sp",
+                font_name="fonts/OpenSans-Bold.ttf",
+                color = (0.200, 0.200, 0.200, 1),
+                halign="left",
                 valign="middle",
-                size_hint_y=None,
-                height=60,
-                text_size=(180, None)
+                size_hint_x=1,
+                text_size=(None, None)
             )
-            box.add_widget(lbl)
+            lbl.bind(size=lambda inst, val: setattr(inst, "text_size", (val[0], None)))
+            row.add_widget(lbl)
 
-            # Imagen del lugar
-            img = Image(source=f"images/{place}.png",allow_stretch=True,mipmap=True, keep_ratio=False,size=(150,150))
-            box.add_widget(img)
-
-            # Botón para ver detalles del evento
-            btn_details = Button(text="Ver detalles", size_hint_y=None, height=40,background_color=(0.6, 1, 0.6, 1),color=(1, 0.992, 0.815, 1))
+            # Botón Ver detalles 
+            btn_details = RoundedButton (
+                text="Ver detalles",
+                font_size="16sp",
+                font_name="fonts/Roboto-Medium.ttf",
+                size_hint_x=None,
+                size_hint_y=None,
+                width=150,
+                pos_hint={"center_y": 0.5},
+                height=40,
+                background_color=(0.251, 0.765, 0.851, 1),
+                color=(1, 1, 1, 1)
+            )
             btn_details.bind(on_press=lambda inst, i=idx: self.show_details(i))
-            box.add_widget(btn_details)
+            row.add_widget(btn_details)
 
-            # Botón para eliminar el evento
-            btn_delete = Button(text="Eliminar", size_hint_y=None, height=40,background_color=(0.6, 1, 0.6, 1),color=(1, 0.992, 0.815, 1))
+            # Botón Eliminar
+            btn_delete = RoundedButton(
+                text="Eliminar",
+                font_size="16sp",
+                font_name="fonts/Roboto-Medium.ttf",
+                size_hint_x=None,
+                size_hint_y=None,
+                width=150,
+                pos_hint={"center_y": 0.5},
+                height=40,
+                background_color=(0.251, 0.765, 0.851, 1),
+                color=(1, 1, 1, 1)
+            )
             btn_delete.bind(on_press=lambda inst, i=idx: self.confirm_delete(i))
-            box.add_widget(btn_delete)
+            row.add_widget(btn_delete)
 
-            layout.add_widget(box)
-
+            layout.add_widget(row)
+            
         scroll.add_widget(layout)
 
         root.add_widget(scroll)
@@ -122,46 +172,73 @@ class EventsScreen(Screen):
         event = self.events[index]
         series_id = event.get("series_id", None)
 
-        content = BoxLayout(orientation="vertical", spacing=20, padding=20)
+        content = FloatLayout()
+        with content.canvas.before: 
+            Color(0.251, 0.765, 0.851, 1)  
+            border=RoundedRectangle(pos=content.pos, size=content.size, radius=[20]) 
+            Color(1.0, 0.992, 0.906, 1) 
+            bg=RoundedRectangle(pos=(content.x+3, content.y+3), size=(content.width-6, content.height-6), radius=[18]) 
+        def update_rects(*args): 
+            border.pos = content.pos 
+            border.size = content.size 
+            bg.pos = (content.x+3, content.y+3) 
+            bg.size = (content.width-6, content.height-6) 
+        content.bind(pos=update_rects, size=update_rects) 
+        Clock.schedule_once(lambda dt: update_rects(), 0)
+
 
         lbl = Label(
             text="¿Desea eliminar todas las ocurrencias de este evento?",
-            font_name="fonts/ELEPHNT",
-            font_size="23sp",
-            bold=True,
-            color=(0, 0.5, 0.5, 1)
+            font_name="fonts/poppins-bold.ttf", 
+            font_size="23sp", 
+            color=(0.251, 0.765, 0.851, 1), 
+            halign="center", 
+            valign="middle", 
+            size_hint=(1, None), 
+            height=80, 
+            pos_hint={"center_x": 0.5, "center_y": 0.75}, 
+            text_size=(500, None)
         )
         content.add_widget(lbl)
 
-        btns = BoxLayout(spacing=20, size_hint_y=None, height=40,width=30)
+        btns = BoxLayout( 
+            orientation="horizontal", 
+            spacing=20, 
+            size_hint=(None, None), 
+            size=(540, 50), 
+            pos_hint={"center_x": 0.5, "center_y": 0.35} 
+        )
 
-        btn_all = Button(
+        btn_all =RoundedButton( 
             text="Sí, todas", 
+            font_size="18sp", 
+            font_name="fonts/Roboto-Medium.ttf", 
+            size_hint=(None, None), 
+            size=(160, 45), 
             background_color=(0.6, 1, 0.6, 1), 
-            color=(1, 0.992, 0.815, 1), 
-            font_name="fonts/ELEPHNT", 
-            bold=True, 
-            font_size=20
+            color=(1,1,1,1)
         )
         btns.add_widget(btn_all)
 
-        btn_one = Button(
+        btn_one = RoundedButton( 
             text="No, solo esta", 
-            background_color=(0.6, 1, 0.6, 1), 
-            color=(1, 0.992, 0.815, 1), 
-            font_name="fonts/ELEPHNT", 
-            bold=True, 
-            font_size=20
+            font_size="18sp", 
+            font_name="fonts/Roboto-Medium.ttf", 
+            size_hint=(None, None), 
+            size=(160, 45), 
+            background_color=(0.251, 0.765, 0.851, 1),
+            color=(1,1,1,1)
         )
         btns.add_widget(btn_one)
 
-        btn_cancel = Button(
+        btn_cancel = RoundedButton( 
             text="Cancelar", 
-            background_color=(0.6, 1, 0.6, 1), 
-            color=(1, 0.992, 0.815, 1), 
-            font_name="fonts/ELEPHNT", 
-            bold=True, 
-            font_size=20
+            font_size="18sp", 
+            font_name="fonts/Roboto-Medium.ttf", 
+            size_hint=(None, None), 
+            size=(160, 45), 
+            background_color=(0.8, 0.8, 0.8, 1),
+            color=(0.243, 0.153, 0.137, 1)
         )
         btns.add_widget(btn_cancel)
         
@@ -170,11 +247,12 @@ class EventsScreen(Screen):
         popup = Popup(
             title="",
             content=content,
-            size_hint=(0.8, 0.3),
+            size_hint=(None,None),
             auto_dismiss=False,
+            size=(600,250),
             background="",
-            background_color=(1, 0.992, 0.815, 1),
-            separator_color=(1, 0.992, 0.815, 1)
+            background_color=(0,0,0,0), 
+            separator_color=(0,0,0,0)
         )
 
         btn_all.bind(on_press=lambda inst: self.delete_series(series_id, popup))
@@ -198,109 +276,74 @@ class EventsScreen(Screen):
         self.on_pre_enter()
 
     # Función para mostrar los detalles de un evento
-    def show_details(self,index):
+    def show_details(self, index):
         event = self.events[index]
 
-        scroll = ScrollView(
-            size_hint=(1,1), 
-            do_scroll_x=False,
-            do_scroll_y=True,
-            bar_width=10,
-            bar_color=(0,0.5,0.5,1), 
-            scroll_type=['bars']
-        ) 
+        # Contenedor principal del popup
+        content = BoxLayout(orientation="vertical", spacing=15, padding=20)
 
-        content = BoxLayout( 
-            orientation="vertical", 
-            spacing=18, 
-            padding=[17, 15], 
-            size_hint_y=None, 
-            size_hint_x=1,
-        ) 
-        content.bind(minimum_height=content.setter("height"))
+        # Scroll con los detalles
+        scroll = ScrollView(size_hint=(1, 0.7))
+        box = BoxLayout(orientation="vertical", spacing=15, size_hint_y=None)
+        box.bind(minimum_height=box.setter("height"))
 
-        start = event.get("start", "—") 
-        end = event.get("end", "—") 
-        resources = event.get("resources", []) 
+        start = event.get("start", "—")
+        end = event.get("end", "—")
+        resources = event.get("resources", [])
         recurrence = event.get("recurrence", "No recurrente")
 
-        # Etiqueta con la fecha de inicio y fin del evento
-        content.add_widget(Label(
+        box.add_widget(Label(
             text=f"Inicio: {start}\nFin: {end}",
-            bold=True,
-            font_name="fonts/ELEPHNT.TTF",
+            font_name="fonts/OpenSans-Bold.ttf",
             font_size="20sp",
-            color=(0, 0.5, 0.5, 1),
-            size_hint_y=None,
-            valign="middle", 
-            size_hint_x=1, 
-            text_size=(390, None),
-            height=60 
-        )) 
-
-        # Etiqueta con los recursos del evento
-        recursos_text = "Recursos:\n" + "\n".join(f"- {r}" for r in resources)
-        content.add_widget(Label(
-            text=recursos_text,
-            bold=True,
-            font_name="fonts/ELEPHNT.TTF",
-            font_size="20sp",
-            color=(0, 0.5, 0.5, 1),
-            halign="left",
-            valign="top",
-            size_hint_y=None,
-            size_hint_x=1,
-            text_size=(390, None)  
+            color=(0.251, 0.765, 0.851, 1),
+            size_hint_y=None, 
+            height=60
         ))
 
-        # Etiqueta con la recurrencia del evento
-        content.add_widget(Label(
-            text=f"Recurrencia: {recurrence}",
-            bold=True,
-            font_name="fonts/ELEPHNT.TTF",
+        recursos_text = "Recursos:\n" + "\n".join(f"- {r}" for r in resources)
+        box.add_widget(Label(
+            text=recursos_text,
+            font_name="fonts/OpenSans-Bold.ttf",
             font_size="20sp",
-            color=(0, 0.5, 0.5, 1),
-            size_hint_y=None,
-            valign="middle",
-            size_hint_x=1,
-            text_size=(390, None),
-            height=40 
-        )) 
+            color=(0.251, 0.765, 0.851, 1),
+            size_hint_y=None
+        ))
 
-        content.add_widget(Label(text=""))
-
-        scroll.add_widget(content) 
-
-        popup = Popup( 
-            title="", 
-            content=scroll, 
-            size_hint=(0.7, 0.2),
-            auto_dismiss=False, 
-            background="", 
-            separator_color=(1, 0.992, 0.815, 1),
-            background_color=(1, 0.992, 0.815, 1) 
-        ) 
-        
-        # Botón para cerrar el popup
-        btn_close = Button(
-            text="Cerrar", 
-            background_color=(0.6, 1, 0.6, 1), 
-            color=(1, 0.992, 0.815, 1), 
-            font_name="fonts/ELEPHNT", 
-            bold=True, 
-            font_size=20
-        )
-        # Caja para centrar el botón abajo 
-        btn_box = BoxLayout( 
-            orientation="vertical", 
+        # Etiqueta de recurrencia
+        box.add_widget(Label(
+            text=f"Recurrencia: {recurrence}",
+            font_name="fonts/OpenSans-Bold.ttf",
+            font_size="20sp",
+            color=(0.251, 0.765, 0.851, 1),
             size_hint_y=None, 
-            height=70, 
-            padding=[0, 10, 0, 0] 
-        ) 
-        btn_box.add_widget(btn_close) 
-        content.add_widget(btn_box) 
-        btn_close.bind(on_press=lambda inst: popup.dismiss())
-        
-        popup.open()
-        
+            height=40
+        ))
 
+        scroll.add_widget(box)
+        content.add_widget(scroll)
+
+        # Botón cerrar
+        btn_close = RoundedButton(
+            text="Cerrar",
+            font_size="18sp",
+            font_name="fonts/Roboto-Medium.ttf",
+            size_hint=(None, None),
+            size=(160, 45),
+            background_color=(0.251, 0.765, 0.851, 1),
+            color=(1, 1, 1, 1)
+        )
+        btn_close.bind(on_press=lambda inst: popup.dismiss())
+        content.add_widget(btn_close)
+
+        popup = Popup(
+            title="",
+            content=content,
+            size_hint=(None, None),
+            size=(600, 400),
+            auto_dismiss=False,
+            background="",
+            background_color=(1.0, 0.992, 0.906, 1),
+            separator_color=(0, 0, 0, 0)
+        )
+        popup.open()

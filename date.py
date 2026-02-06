@@ -104,7 +104,7 @@ class DateScreen(Screen):
             text="Introduzca el horario en que desea realizar su evento",
             color=(0, 0.5, 0.5, 1),
             font_name="fonts/SHOWG.TTF",
-            font_size="25sp",
+            font_size="30sp",
             pos_hint={"center_x": 0.5, "center_y": 0.95}
         )
         root.add_widget(label)
@@ -208,7 +208,7 @@ class DateScreen(Screen):
         lbl = Label(
             text=text,
             color=color,
-            font_size="16sp",
+            font_size="20sp",
             bold=True,
             size_hint_y=None,
             height=45
@@ -237,6 +237,13 @@ class DateScreen(Screen):
         if end <= start:
             self.show_message("La fecha de fin debe ser posterior a la de inicio")
             return
+        
+        # Validar que la fecha de inicio no sea anterior al momento actual
+        now = datetime.now()
+        if start < now:
+            self.show_message("La fecha de inicio no puede ser anterior al momento actual")
+            return
+
 
         resources = self.manager.selected_resources
         suggested_start, suggested_end, occupied = resources_available(start, end, resources, self.resources_info, self.events)

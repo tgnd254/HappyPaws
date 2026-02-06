@@ -10,6 +10,8 @@ from kivy.uix.gridlayout import GridLayout
 from kivy.uix.boxlayout import BoxLayout
 from kivy.graphics import Color, RoundedRectangle
 from kivy.clock import Clock
+from kivy.uix.popup import Popup
+from events import RoundedButton
 
 class ImageButton(ButtonBehavior, Image):
     pass
@@ -50,22 +52,21 @@ class ResourcesScreen(Screen):
 
         label = Label(
             text="Selecciona los recursos necesarios para tu evento",
-            color=(0, 0.5, 0.5, 1),
-            font_name="fonts/SHOWG.TTF",
-            font_size="28sp",
+            color=(0.251, 0.765, 0.851, 1), 
+            font_name="fonts/poppins-bold.ttf", 
+            font_size="30sp", 
             pos_hint={"center_x": 0.5, "center_y": 0.95}
         )
         root.add_widget(label)
 
         # Crear scroll para los recursos
         scroll_resources = ScrollView(
-            size_hint=(1, 0.55),
-            pos_hint={"center_x": 0.5, "center_y": 0.63},
+            size_hint=(0.95, 0.65),
+            pos_hint={"center_x": 0.5, "center_y": 0.6},
             do_scroll_x=False,
             do_scroll_y=True,
             bar_width=12,
-            bar_margin=8,
-            bar_color=(0, 0.7, 0.7, 1),
+            bar_color=(0.251, 0.765, 0.851, 1),
             scroll_type=['bars']
         )
 
@@ -80,29 +81,31 @@ class ResourcesScreen(Screen):
             # Crear tarjeta para el recurso
             card = BoxLayout(
                 orientation="horizontal",
-                height=305,
-                spacing=40,
+                height=180,
+                spacing=20,
                 size_hint=(1, None),
-                padding=(10,10)
+                padding=15
             )
             # Crear fondo redondeado
             with card.canvas.before:
-                Color(0.6, 1, 0.6, 1) 
-                rr = RoundedRectangle(pos=card.pos, size=card.size, radius=[12])
-
-            def update_rr(instance,value,rect=rr,widget=card): 
-                rect.pos = (widget.x+5 ,widget.y+5) 
-                rect.size = (widget.width-10,widget.height-10)
-            card.bind(pos=update_rr, size=update_rr)
-
-            Clock.schedule_once(lambda dt: update_rr(card,None), 0)
+                Color(1.0, 0.976, 0.769, 1)
+                border = RoundedRectangle(pos=card.pos, size=card.size, radius=[15])
+                Color(1.0, 0.992, 0.906, 1)   
+                bg = RoundedRectangle(pos=(card.x+3, card.y+3), size=(card.width-6, card.height-6), radius=[12])
+            def update_card(instance, value, b=border, g=bg, widget=card): 
+                b.pos = widget.pos 
+                b.size = widget.size 
+                g.pos = (widget.x+3, widget.y+3) 
+                g.size = (widget.width-6, widget.height-6)
+            card.bind(pos=update_card, size=update_card)
+            Clock.schedule_once(lambda dt: update_card(card,None), 0)
             
             # Mostrar imagen de los recursos
             btn = ImageButton(
                 source="images/" + r["name"].lower().replace(" ", "_")+ ".png",
                 mipmap=True,
                 size_hint=(None, None),
-                size=(300, 300),
+                size=(150, 150),
                 allow_stretch=False,
                 keep_ratio=True
             )
@@ -110,13 +113,13 @@ class ResourcesScreen(Screen):
             btn.bind(on_press=lambda inst, res=r: self.toggle_resource(res))
 
             # Mostrar nombre y descripcion de los recursos
-            info_box = BoxLayout(orientation="vertical", spacing=0,padding=(10,10))
+            info_box = BoxLayout(orientation="vertical", spacing=8 ,padding=(5,10))
 
             name_label = Label(
                 text=r["name"],
-                font_size="25sp",
-                bold=True,
-                color=(0.2078, 0.4980, 0.7294, 1),
+                font_size="22sp",
+                font_name="fonts/OpenSans-Bold.ttf",
+                color=(0.251, 0.765, 0.851, 1),
                 halign="left",
                 valign="bottom",
                 size_hint_y=None,
@@ -126,11 +129,13 @@ class ResourcesScreen(Screen):
 
             desc_label = Label(
                 text=r.get("description", ""),
-                font_size="23sp",
-                color=(0.2078, 0.4980, 0.7294, 1),
+                font_size="20sp",
+                font_name="fonts/Roboto-Medium.ttf",
+                color=(0.243, 0.153, 0.137, 1),
                 halign="left",
                 valign="top",
-                height=40
+                size_hint_y=None,
+                height=60
             )
             desc_label.bind(size=lambda inst, val: setattr(inst, "text_size", (val[0], None)))
 
@@ -146,37 +151,6 @@ class ResourcesScreen(Screen):
 
         scroll_resources.add_widget(grid)
         root.add_widget(scroll_resources)
-
-        # Crear scroll para los errores
-        self.error_scroll = ScrollView(
-            size_hint=(0.70, 0.15),
-            pos_hint={"center_x": 0.5, "center_y": 0.23},
-            do_scroll_x=False,
-            do_scroll_y=True,
-            bar_width=10,
-            bar_color=(0.9, 0.1, 0.1, 1), 
-            scroll_type=['bars']
-        )
-
-        with self.error_scroll.canvas.before: 
-            Color(1, 0.9, 0.9, 0.8)
-            self.error_bg = RoundedRectangle(radius=[10])
-            def update_error_bg(*args):
-                self.error_bg.pos = self.error_scroll.pos
-                self.error_bg.size = self.error_scroll.size
-            self.error_scroll.bind(pos=update_error_bg, size=update_error_bg)
-
-        self.error_box = GridLayout(
-            cols=1,
-            spacing=8,
-            size_hint_y=None,
-            padding=10
-        )
-        self.error_box.bind(minimum_height=self.error_box.setter("height"))
-
-        self.error_scroll.add_widget(self.error_box)
-
-        root.add_widget(self.error_scroll)
 
         # Botón para continuar
         btn_continue = ImageButton(
@@ -213,48 +187,68 @@ class ResourcesScreen(Screen):
         # Si el recurso esta seleccionado se muestra en azul
         if name not in self.selected_resources:
             self.selected_resources.append(name)
-            self.buttons[name].color = (0, 0, 1, 1)
+            self.buttons[name].color = (0.5, 0.7, 1, 1)
         # Si el recurso no está seleccionado se muestra en blanco
         else:
             self.selected_resources.remove(name)
             self.buttons[name].color = (1, 1, 1, 1)
-        self.update_errors()
-
-    # Mostrar los errores encontrados
-    def update_errors(self):
-        self.error_box.clear_widgets()
-
-        errors = self.validate_resources()
-
-        for err in errors:
-            self.error_box.add_widget(Label(
-            text=err,
-            font_size="16sp",
-            color=(0.9, 0.1, 0.1, 1),
-            bold=True,
-            size_hint_y=None,
-            height=30
-        ))
-        Clock.schedule_once(lambda dt: setattr(self.error_scroll, 'scroll_y', 1))
 
     # Método para continuar. Verificar si no quedan errores
     def try_continue(self, instance):
-        self.error_box.clear_widgets()
-
         errors = self.validate_resources()
-        
+    
         if errors:
-            for err in errors:
-                self.error_box.add_widget(Label(
-                    text=err,
-                    font_size="16sp",
-                    color=(0.9, 0.1, 0.1, 1),  
-                    bold=True,
-                    size_hint_y=None,
-                    height=30
-                ))
-            return
+            content = FloatLayout()
+            with content.canvas.before: 
+                Color(0.251, 0.765, 0.851, 1)  
+                border=RoundedRectangle(pos=content.pos, size=content.size, radius=[20]) 
+                Color(1.0, 0.992, 0.906, 1) 
+                bg=RoundedRectangle(pos=(content.x+3, content.y+3), size=(content.width-6, content.height-6), radius=[18]) 
+            def update_rects(*args): 
+                border.pos = content.pos 
+                border.size = content.size 
+                bg.pos = (content.x+3, content.y+3) 
+                bg.size = (content.width-6, content.height-6) 
+            content.bind(pos=update_rects, size=update_rects) 
+            Clock.schedule_once(lambda dt: update_rects(), 0)
+            
+            lbl= Label(
+                text=errors[0],  # solo el primer error
+                font_size="20sp",
+                font_name="fonts/OpenSans-Bold.ttf",
+                color=(0.251, 0.765, 0.851, 1), 
+                halign="center", 
+                valign="middle", 
+                size_hint=(1, None), 
+                height=80, 
+                pos_hint={"center_x": 0.5, "center_y": 0.75}, 
+                text_size=(500, None)            
+            )
+            content.add_widget(lbl)
 
-        # Cambiar a la selección de fecha. Guardar recursos seleccionados
+            btn_close = RoundedButton( 
+                text="Cerrar", 
+                font_size="18sp", 
+                font_name="fonts/Roboto-Medium.ttf", 
+                size_hint=(None, None), 
+                size=(160, 45), 
+                pos_hint={"center_x": 0.5, "center_y": 0.2},
+                color=(1, 1, 1, 1)
+            )  
+            content.add_widget(btn_close)
+
+            popup = Popup(
+                title="",
+                content=content,
+                size_hint=(None,None),
+                auto_dismiss=False,
+                size=(600,250),
+                background="",
+                background_color=(0,0,0,0), 
+                separator_color=(0,0,0,0)
+            )
+            btn_close.bind(on_press=lambda inst: popup.dismiss())
+            popup.open()
+            return
         self.manager.selected_resources = self.selected_resources
         self.manager.current = "date"

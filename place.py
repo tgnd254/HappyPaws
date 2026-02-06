@@ -8,6 +8,7 @@ from kivy.uix.screenmanager import Screen
 class ImageButton(ButtonBehavior, Image): 
     pass
 
+
 class PlaceScreen(Screen):
     def __init__(self, **kwargs): 
         super().__init__(**kwargs) 
@@ -20,7 +21,12 @@ class PlaceScreen(Screen):
         background=Image(source="images/background.png", allow_stretch=True, keep_ratio=False)
         root.add_widget(background)
 
-        label = Label(text="¿Dónde quieres realizar el evento?", font_name="fonts/SHOWG.TTF", font_size="32sp",color=(0, 0.5, 0.5, 1),pos_hint={"center_x":0.5, "center_y":0.9})
+        label = Label(
+            text="¿Dónde quieres realizar el evento?", 
+            color=(0.251, 0.765, 0.851, 1),
+            font_name="fonts/poppins-bold.ttf",
+            font_size="40sp",
+            pos_hint={"center_x":0.5, "center_y":0.9})
         root.add_widget(label)
 
         places=[ 
@@ -40,7 +46,7 @@ class PlaceScreen(Screen):
             row=i//4
             column=i%4
             x_pos=0.2+column*0.2
-            y_pos=0.6 if row==0 else 0.30
+            y_pos=0.7 if row==0 else 0.40
             btn = ImageButton(
                 source="images/"+name+".png",
                 allow_stretch=False,
@@ -59,10 +65,10 @@ class PlaceScreen(Screen):
         btn_back = ImageButton (
             source="images/back.png",
             size_hint=(None, None),
-            size=(60, 60),
+            size=(100, 100),
             allow_stretch=True,
             keep_ratio=True,
-            pos_hint={"center_x": 0.05,"center_y": 0.1}
+            pos_hint={"center_x": 0.09,"center_y": 0.15}
         )
         btn_back.bind(on_press=go_back)
         root.add_widget(btn_back)

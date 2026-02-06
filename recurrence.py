@@ -25,7 +25,7 @@ class RecurrenceScreen(Screen):
         self.clear_widgets()
         root = FloatLayout()
 
-        background = Image(source="images/background.png", allow_stretch=True, keep_ratio=False)
+        background = Image(source="images/recurrence.png", allow_stretch=True, keep_ratio=False)
         root.add_widget(background)
 
         root.add_widget(Label(
@@ -123,7 +123,7 @@ class RecurrenceScreen(Screen):
         lbl = Label(
             text=text,
             color=color,
-            font_size="16sp",
+            font_size="20sp",
             bold=True,
             size_hint_y=None,
             height=45

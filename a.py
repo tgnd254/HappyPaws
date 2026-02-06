@@ -1,0 +1,260 @@
+import json
+from kivy.uix.screenmanager import Screen
+from kivy.uix.floatlayout import FloatLayout
+from kivy.uix.label import Label
+from kivy.uix.image import Image
+from kivy.uix.behaviors import ButtonBehavior
+from kivy.uix.button import Button
+from kivy.uix.scrollview import ScrollView
+from kivy.uix.gridlayout import GridLayout
+from kivy.uix.boxlayout import BoxLayout
+from kivy.graphics import Color, RoundedRectangle
+from kivy.clock import Clock
+
+class ImageButton(ButtonBehavior, Image):
+    pass
+
+class ResourcesScreen(Screen):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+
+        # Cargar recursos desde un archivo JSON
+        with open("data/resources.json", "r", encoding="utf-8") as f:
+            self.resources = json.load(f)
+
+        self.selected_resources = []
+        self.buttons = {}
+    
+    # Método para validar los recursos seleccionados
+    def validate_resources(self):
+        errors = []
+        for r in self.resources:
+            name = r["name"]
+            if name in self.selected_resources:
+                for excl in r.get("exclusions", []):
+                    if excl in self.selected_resources:
+                        errors.append(f" {name} no puede usarse junto a {excl}")
+                for assoc in r.get("associated", []):
+                    if assoc not in self.selected_resources:
+                        errors.append(f" {name} requiere {assoc}")
+        return errors
+
+    def on_pre_enter(self):
+        # Limpiar widgets anteriores
+        self.clear_widgets()
+
+        root = FloatLayout()
+
+        background = Image(source="images/background.png", allow_stretch=True, keep_ratio=False)
+        root.add_widget(background)
+
+        label = Label(
+            text="Selecciona los recursos necesarios para tu evento",
+            color=(0, 0.5, 0.5, 1),
+            font_name="fonts/SHOWG.TTF",
+            font_size="28sp",
+            pos_hint={"center_x": 0.5, "center_y": 0.95}
+        )
+        root.add_widget(label)
+
+        # Crear scroll para los recursos
+        scroll_resources = ScrollView(
+            size_hint=(1, 0.55),
+            pos_hint={"center_x": 0.5, "center_y": 0.63},
+            do_scroll_x=False,
+            do_scroll_y=True,
+            bar_width=12,
+            bar_margin=8,
+            bar_color=(0, 0.7, 0.7, 1),
+            scroll_type=['bars']
+        )
+
+        grid = GridLayout(cols=1, spacing=10, padding=20, size_hint_y=None)
+        grid.bind(minimum_height=grid.setter("height"))
+
+        place = self.manager.selected_place
+        place_resources = [r for r in self.resources if place in r["place"]]
+
+        # Crear cada fila de recurso
+        for r in place_resources:
+            # Crear tarjeta para el recurso
+            card = BoxLayout(
+                orientation="horizontal",
+                height=305,
+                spacing=40,
+                size_hint=(1, None),
+                padding=(10,10)
+            )
+            # Crear fondo redondeado
+            with card.canvas.before:
+                Color(0.6, 1, 0.6, 1) 
+                rr = RoundedRectangle(pos=card.pos, size=card.size, radius=[12])
+
+            def update_rr(instance,value,rect=rr,widget=card): 
+                rect.pos = (widget.x+5 ,widget.y+5) 
+                rect.size = (widget.width-10,widget.height-10)
+            card.bind(pos=update_rr, size=update_rr)
+
+            Clock.schedule_once(lambda dt: update_rr(card,None), 0)
+            
+            # Mostrar imagen de los recursos
+            btn = ImageButton(
+                source="images/" + r["name"].lower().replace(" ", "_")+ ".png",
+                mipmap=True,
+                size_hint=(None, None),
+                size=(300, 300),
+                allow_stretch=False,
+                keep_ratio=True
+            )
+            btn.resource = r
+            btn.bind(on_press=lambda inst, res=r: self.toggle_resource(res))
+
+            # Mostrar nombre y descripcion de los recursos
+            info_box = BoxLayout(orientation="vertical", spacing=0,padding=(10,10))
+
+            name_label = Label(
+                text=r["name"],
+                font_size="25sp",
+                bold=True,
+                color=(0.2078, 0.4980, 0.7294, 1),
+                halign="left",
+                valign="bottom",
+                size_hint_y=None,
+                height=25, 
+            )
+            name_label.bind(size=lambda inst, val: setattr(inst, "text_size", (val[0], None)))
+
+            desc_label = Label(
+                text=r.get("description", ""),
+                font_size="23sp",
+                color=(0.2078, 0.4980, 0.7294, 1),
+                halign="left",
+                valign="top",
+                height=40
+            )
+            desc_label.bind(size=lambda inst, val: setattr(inst, "text_size", (val[0], None)))
+
+            info_box.add_widget(name_label)
+            info_box.add_widget(desc_label)
+
+            card.add_widget(btn)
+            card.add_widget(info_box) 
+
+            grid.add_widget(card)
+
+            self.buttons[r["name"]] = btn
+
+        scroll_resources.add_widget(grid)
+        root.add_widget(scroll_resources)
+
+        # Crear scroll para los errores
+        self.error_scroll = ScrollView(
+            size_hint=(0.70, 0.15),
+            pos_hint={"center_x": 0.5, "center_y": 0.23},
+            do_scroll_x=False,
+            do_scroll_y=True,
+            bar_width=10,
+            bar_color=(0.9, 0.1, 0.1, 1), 
+            scroll_type=['bars']
+        )
+
+        with self.error_scroll.canvas.before: 
+            Color(1, 0.9, 0.9, 0.8)
+            self.error_bg = RoundedRectangle(radius=[10])
+            def update_error_bg(*args):
+                self.error_bg.pos = self.error_scroll.pos
+                self.error_bg.size = self.error_scroll.size
+            self.error_scroll.bind(pos=update_error_bg, size=update_error_bg)
+
+        self.error_box = GridLayout(
+            cols=1,
+            spacing=8,
+            size_hint_y=None,
+            padding=10
+        )
+        self.error_box.bind(minimum_height=self.error_box.setter("height"))
+
+        self.error_scroll.add_widget(self.error_box)
+
+        root.add_widget(self.error_scroll)
+
+        # Botón para continuar
+        btn_continue = ImageButton(
+            source="images/check..png",
+            size_hint=(None, None),
+            pos_hint={"center_x": 0.90, "center_y": 0.1},
+            size=(60,60),
+            allow_stretch=True,
+            keep_ratio=True,
+        )
+        btn_continue.bind(on_press=self.try_continue)
+        root.add_widget(btn_continue)
+
+        # Botón para volver
+        def go_back(inst):
+            self.manager.current="place"
+
+        btn_back = ImageButton (
+                source="images/back.png",
+                size_hint=(None, None),
+                size=(60, 60),
+                allow_stretch=True,
+                keep_ratio=True,
+                pos_hint={"center_x": 0.05,"center_y": 0.1}
+        )
+        btn_back.bind(on_press=go_back)
+        root.add_widget(btn_back)
+
+        self.add_widget(root)
+
+    # Método para la selección de recursos
+    def toggle_resource(self, resource):
+        name = resource["name"]
+        # Si el recurso esta seleccionado se muestra en azul
+        if name not in self.selected_resources:
+            self.selected_resources.append(name)
+            self.buttons[name].color = (0, 0, 1, 1)
+        # Si el recurso no está seleccionado se muestra en blanco
+        else:
+            self.selected_resources.remove(name)
+            self.buttons[name].color = (1, 1, 1, 1)
+        self.update_errors()
+
+    # Mostrar los errores encontrados
+    def update_errors(self):
+        self.error_box.clear_widgets()
+
+        errors = self.validate_resources()
+
+        for err in errors:
+            self.error_box.add_widget(Label(
+            text=err,
+            font_size="16sp",
+            color=(0.9, 0.1, 0.1, 1),
+            bold=True,
+            size_hint_y=None,
+            height=30
+        ))
+        Clock.schedule_once(lambda dt: setattr(self.error_scroll, 'scroll_y', 1))
+
+    # Método para continuar. Verificar si no quedan errores
+    def try_continue(self, instance):
+        self.error_box.clear_widgets()
+
+        errors = self.validate_resources()
+        
+        if errors:
+            for err in errors:
+                self.error_box.add_widget(Label(
+                    text=err,
+                    font_size="16sp",
+                    color=(0.9, 0.1, 0.1, 1),  
+                    bold=True,
+                    size_hint_y=None,
+                    height=30
+                ))
+            return
+
+        # Cambiar a la selección de fecha. Guardar recursos seleccionados
+        self.manager.selected_resources = self.selected_resources
+        self.manager.current = "date"
