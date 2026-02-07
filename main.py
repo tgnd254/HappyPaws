@@ -1,25 +1,16 @@
-from kivy.config import Config 
-Config.set('graphics', 'resizable', False) 
-Config.set('graphics', 'width', '800') 
-Config.set('graphics', 'height', '600')
-
 from kivy.app import App
 from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.image import Image
 from kivy.uix.behaviors import ButtonBehavior
 from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.core.window import Window
-Window.size = (800, 600) 
-Window.resizable = False
+from widgets import ImageButton
 
 from place import PlaceScreen
 from resources import ResourcesScreen
 from date import DateScreen
 from events import EventsScreen
 from recurrence import RecurrenceScreen
-
-class ImageButton(ButtonBehavior, Image): 
-    pass
 
 class HomeScreen(Screen):
     def __init__(self, **kwargs):

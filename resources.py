@@ -11,36 +11,18 @@ from kivy.uix.boxlayout import BoxLayout
 from kivy.graphics import Color, RoundedRectangle
 from kivy.clock import Clock
 from kivy.uix.popup import Popup
-from events import RoundedButton
-
-class ImageButton(ButtonBehavior, Image):
-    pass
+from widgets import ImageButton,RoundedButton,show_message
+from utils import load_events,load_resources,save_events,validate_resources
 
 class ResourcesScreen(Screen):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-        # Cargar recursos desde un archivo JSON
-        with open("data/resources.json", "r", encoding="utf-8") as f:
-            self.resources = json.load(f)
+        self.resources = load_resources()
 
         self.selected_resources = []
         self.buttons = {}
     
-    # Método para validar los recursos seleccionados
-    def validate_resources(self):
-        errors = []
-        for r in self.resources:
-            name = r["name"]
-            if name in self.selected_resources:
-                for excl in r.get("exclusions", []):
-                    if excl in self.selected_resources:
-                        errors.append(f" {name} no puede usarse junto a {excl}")
-                for assoc in r.get("associated", []):
-                    if assoc not in self.selected_resources:
-                        errors.append(f" {name} requiere {assoc}")
-        return errors
-
     def on_pre_enter(self):
         # Limpiar widgets anteriores
         self.clear_widgets()
@@ -61,8 +43,8 @@ class ResourcesScreen(Screen):
 
         # Crear scroll para los recursos
         scroll_resources = ScrollView(
-            size_hint=(0.95, 0.65),
-            pos_hint={"center_x": 0.5, "center_y": 0.6},
+            size_hint=(0.95, 0.75),
+            pos_hint={"center_x": 0.5, "center_y": 0.55},
             do_scroll_x=False,
             do_scroll_y=True,
             bar_width=12,
@@ -156,8 +138,8 @@ class ResourcesScreen(Screen):
         btn_continue = ImageButton(
             source="images/check..png",
             size_hint=(None, None),
-            pos_hint={"center_x": 0.90, "center_y": 0.1},
-            size=(60,60),
+            pos_hint={"center_x": 0.90, "center_y": 0.09},
+            size=(150,150),
             allow_stretch=True,
             keep_ratio=True,
         )
@@ -169,12 +151,12 @@ class ResourcesScreen(Screen):
             self.manager.current="place"
 
         btn_back = ImageButton (
-                source="images/back.png",
-                size_hint=(None, None),
-                size=(60, 60),
-                allow_stretch=True,
-                keep_ratio=True,
-                pos_hint={"center_x": 0.05,"center_y": 0.1}
+            source="images/back.png",
+            size_hint=(None, None),
+            size=(130, 130),
+            allow_stretch=True,
+            keep_ratio=True,
+            pos_hint={"center_x": 0.09,"center_y": 0.09}
         )
         btn_back.bind(on_press=go_back)
         root.add_widget(btn_back)
@@ -195,60 +177,10 @@ class ResourcesScreen(Screen):
 
     # Método para continuar. Verificar si no quedan errores
     def try_continue(self, instance):
-        errors = self.validate_resources()
-    
+        errors = validate_resources(self.resources,self.selected_resources)
         if errors:
-            content = FloatLayout()
-            with content.canvas.before: 
-                Color(0.251, 0.765, 0.851, 1)  
-                border=RoundedRectangle(pos=content.pos, size=content.size, radius=[20]) 
-                Color(1.0, 0.992, 0.906, 1) 
-                bg=RoundedRectangle(pos=(content.x+3, content.y+3), size=(content.width-6, content.height-6), radius=[18]) 
-            def update_rects(*args): 
-                border.pos = content.pos 
-                border.size = content.size 
-                bg.pos = (content.x+3, content.y+3) 
-                bg.size = (content.width-6, content.height-6) 
-            content.bind(pos=update_rects, size=update_rects) 
-            Clock.schedule_once(lambda dt: update_rects(), 0)
-            
-            lbl= Label(
-                text=errors[0],  # solo el primer error
-                font_size="20sp",
-                font_name="fonts/OpenSans-Bold.ttf",
-                color=(0.251, 0.765, 0.851, 1), 
-                halign="center", 
-                valign="middle", 
-                size_hint=(1, None), 
-                height=80, 
-                pos_hint={"center_x": 0.5, "center_y": 0.75}, 
-                text_size=(500, None)            
-            )
-            content.add_widget(lbl)
-
-            btn_close = RoundedButton( 
-                text="Cerrar", 
-                font_size="18sp", 
-                font_name="fonts/Roboto-Medium.ttf", 
-                size_hint=(None, None), 
-                size=(160, 45), 
-                pos_hint={"center_x": 0.5, "center_y": 0.2},
-                color=(1, 1, 1, 1)
-            )  
-            content.add_widget(btn_close)
-
-            popup = Popup(
-                title="",
-                content=content,
-                size_hint=(None,None),
-                auto_dismiss=False,
-                size=(600,250),
-                background="",
-                background_color=(0,0,0,0), 
-                separator_color=(0,0,0,0)
-            )
-            btn_close.bind(on_press=lambda inst: popup.dismiss())
-            popup.open()
+            show_message(errors[0])
             return
+        
         self.manager.selected_resources = self.selected_resources
         self.manager.current = "date"

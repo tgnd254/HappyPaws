@@ -12,53 +12,10 @@ from kivy.uix.image import Image
 from kivy.uix.behaviors import ButtonBehavior
 from kivy.graphics import Color, RoundedRectangle
 from kivy.clock import Clock
+from widgets import ImageButton,RoundedButton,RoundedBox
+from utils import load_events,load_resources,save_events
 
-class ImageButton(ButtonBehavior, Image): 
-    pass
-
-def load_events():
-    try:
-        with open("data/events.json", "r", encoding="utf-8") as f:
-            return json.load(f)
-    except FileNotFoundError:
-        return []
-
-def save_events(events):
-    with open("data/events.json", "w", encoding="utf-8") as f:
-        json.dump(events, f, indent=4, ensure_ascii=False)
-
-class RoundedButton(Button): 
-    def __init__(self, **kwargs): 
-        super().__init__(**kwargs) 
-        self.background_normal = "" 
-        self.background_down = "" 
-        self.bg_color = kwargs.get("background_color", (0.251, 0.765, 0.851, 1))
-        self.background_color=(0,0,0,0)
-        with self.canvas.before: 
-            Color(*self.bg_color) 
-            self.rect = RoundedRectangle(pos=self.pos, size=self.size, radius=[12]) 
-        self.bind(pos=self.update_rect, size=self.update_rect)
-
-    def update_rect(self, *args): 
-        self.rect.pos = self.pos 
-        self.rect.size = self.size
-
-class RoundedBox(BoxLayout): 
-    def __init__(self, **kwargs): 
-        super().__init__(**kwargs) 
-        self.padding = 10 
-        self.spacing = 10 
-        with self.canvas.before: 
-            Color(1.0, 0.976, 0.769, 1)
-            self.border = RoundedRectangle(pos=self.pos, size=self.size, radius=[12]) 
-            Color(1.0, 0.992, 0.906, 1)
-            self.bg = RoundedRectangle(pos=(self.x+3, self.y+3), size=(self.width-6, self.height-6), radius=[10]) 
-        self.bind(pos=self.update_rects, size=self.update_rects)
-    def update_rects(self, *args): 
-        self.border.pos = self.pos 
-        self.border.size = self.size 
-        self.bg.pos = (self.x+3, self.y+3) 
-        self.bg.size = (self.width-6, self.height-6)
+load_events()
 
 class EventsScreen(Screen):
     def __init__(self, **kwargs): 
@@ -157,10 +114,10 @@ class EventsScreen(Screen):
         btn_back = ImageButton (
             source="images/back.png",
             size_hint=(None, None),
-            size=(60, 60),
+            size=(150, 150),
             allow_stretch=True,
             keep_ratio=True,
-            pos_hint={"center_x": 0.05,"center_y": 0.05}
+            pos_hint={"center_x": 0.09,"center_y": 0.09}
         )
         btn_back.bind(on_press=go_back)
         root.add_widget(btn_back)
@@ -174,7 +131,7 @@ class EventsScreen(Screen):
 
         content = FloatLayout()
         with content.canvas.before: 
-            Color(0.251, 0.765, 0.851, 1)  
+            Color(0.200, 0.200, 0.200, 1) 
             border=RoundedRectangle(pos=content.pos, size=content.size, radius=[20]) 
             Color(1.0, 0.992, 0.906, 1) 
             bg=RoundedRectangle(pos=(content.x+3, content.y+3), size=(content.width-6, content.height-6), radius=[18]) 
@@ -186,12 +143,11 @@ class EventsScreen(Screen):
         content.bind(pos=update_rects, size=update_rects) 
         Clock.schedule_once(lambda dt: update_rects(), 0)
 
-
         lbl = Label(
             text="¿Desea eliminar todas las ocurrencias de este evento?",
             font_name="fonts/poppins-bold.ttf", 
             font_size="23sp", 
-            color=(0.251, 0.765, 0.851, 1), 
+            color=(0.200, 0.200, 0.200, 1), 
             halign="center", 
             valign="middle", 
             size_hint=(1, None), 
@@ -255,7 +211,7 @@ class EventsScreen(Screen):
             separator_color=(0,0,0,0)
         )
 
-        btn_all.bind(on_press=lambda inst: self.delete_series(series_id, popup))
+        btn_all.bind(on_press=lambda inst: self.delete_series(index,series_id, popup))
         btn_one.bind(on_press=lambda inst: self.delete_event(index, popup))
         btn_cancel.bind(on_press=popup.dismiss)
 
@@ -269,8 +225,11 @@ class EventsScreen(Screen):
         self.on_pre_enter()
 
     # Función para eliminar una serie de eventos
-    def delete_series(self, series_id, popup):
-        self.events = [ev for ev in self.events if ev.get("series_id") != series_id]
+    def delete_series(self, index, series_id, popup):
+        if(series_id):
+            self.events = [ev for ev in self.events if ev.get("series_id") != series_id]
+        else:
+            del self.events[index]
         save_events(self.events)
         popup.dismiss()
         self.on_pre_enter()
@@ -280,11 +239,31 @@ class EventsScreen(Screen):
         event = self.events[index]
 
         # Contenedor principal del popup
-        content = BoxLayout(orientation="vertical", spacing=15, padding=20)
+        content = FloatLayout()
+        with content.canvas.before: 
+            Color(0.200, 0.200, 0.200, 1)
+            border=RoundedRectangle(pos=content.pos, size=content.size, radius=[20]) 
+            Color(1.0, 0.992, 0.906, 1) 
+            bg=RoundedRectangle(pos=(content.x+3, content.y+3), size=(content.width-6, content.height-6), radius=[18]) 
+        def update_rects(*args): 
+            border.pos = content.pos 
+            border.size = content.size 
+            bg.pos = (content.x+3, content.y+3) 
+            bg.size = (content.width-6, content.height-6) 
+        content.bind(pos=update_rects, size=update_rects) 
+        Clock.schedule_once(lambda dt: update_rects(), 0)
 
-        # Scroll con los detalles
-        scroll = ScrollView(size_hint=(1, 0.7))
-        box = BoxLayout(orientation="vertical", spacing=15, size_hint_y=None)
+        scroll = ScrollView( 
+            size_hint=(1, 0.6), 
+            pos_hint={"center_x": 0.5, "center_y": 0.65}, 
+            do_scroll_x=False,
+            do_scroll_y=True,
+            bar_width=12,
+            bar_color=(0.200, 0.200, 0.200, 1),
+            scroll_type=['bars']
+        )
+
+        box = BoxLayout(orientation="vertical", spacing=15, padding=20, size_hint_y=None) 
         box.bind(minimum_height=box.setter("height"))
 
         start = event.get("start", "—")
@@ -292,33 +271,39 @@ class EventsScreen(Screen):
         resources = event.get("resources", [])
         recurrence = event.get("recurrence", "No recurrente")
 
-        box.add_widget(Label(
+        date=Label(
             text=f"Inicio: {start}\nFin: {end}",
             font_name="fonts/OpenSans-Bold.ttf",
             font_size="20sp",
-            color=(0.251, 0.765, 0.851, 1),
+            color=(0.200, 0.200, 0.200, 1),
             size_hint_y=None, 
             height=60
-        ))
+        )
+        date.bind(texture_size=lambda inst, val: setattr(date, "height", val[1])) 
+        box.add_widget(date)
 
         recursos_text = "Recursos:\n" + "\n".join(f"- {r}" for r in resources)
-        box.add_widget(Label(
+        resources_lbl=Label(
             text=recursos_text,
             font_name="fonts/OpenSans-Bold.ttf",
             font_size="20sp",
-            color=(0.251, 0.765, 0.851, 1),
+            color=(0.200, 0.200, 0.200, 1),
             size_hint_y=None
-        ))
+        )
+        resources_lbl.bind(texture_size=lambda inst, val: setattr(resources_lbl, "height", val[1])) 
+        box.add_widget(resources_lbl)
 
         # Etiqueta de recurrencia
-        box.add_widget(Label(
+        recurrence_lbl=Label(
             text=f"Recurrencia: {recurrence}",
             font_name="fonts/OpenSans-Bold.ttf",
             font_size="20sp",
-            color=(0.251, 0.765, 0.851, 1),
+            color=(0.200, 0.200, 0.200, 1),
             size_hint_y=None, 
             height=40
-        ))
+        )
+        recurrence_lbl.bind(texture_size=lambda inst, val: setattr(recurrence_lbl, "height", val[1])) 
+        box.add_widget(recurrence_lbl)
 
         scroll.add_widget(box)
         content.add_widget(scroll)
@@ -330,7 +315,8 @@ class EventsScreen(Screen):
             font_name="fonts/Roboto-Medium.ttf",
             size_hint=(None, None),
             size=(160, 45),
-            background_color=(0.251, 0.765, 0.851, 1),
+            background_color=(1.0, 0.627, 0.478, 1),
+            pos_hint={"center_x": 0.5, "center_y": 0.2},
             color=(1, 1, 1, 1)
         )
         btn_close.bind(on_press=lambda inst: popup.dismiss())
@@ -339,11 +325,11 @@ class EventsScreen(Screen):
         popup = Popup(
             title="",
             content=content,
-            size_hint=(None, None),
-            size=(600, 400),
+            size_hint=(None,None),
             auto_dismiss=False,
+            size=(600,250),
             background="",
-            background_color=(1.0, 0.992, 0.906, 1),
-            separator_color=(0, 0, 0, 0)
+            background_color=(0,0,0,0), 
+            separator_color=(0,0,0,0)
         )
         popup.open()

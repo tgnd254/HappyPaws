@@ -4,10 +4,7 @@ from kivy.uix.image import Image
 from kivy.uix.label import Label
 from kivy.uix.behaviors import ButtonBehavior
 from kivy.uix.screenmanager import Screen
-
-class ImageButton(ButtonBehavior, Image): 
-    pass
-
+from widgets import ImageButton
 
 class PlaceScreen(Screen):
     def __init__(self, **kwargs): 
@@ -45,14 +42,14 @@ class PlaceScreen(Screen):
         for i,name in enumerate(places):
             row=i//4
             column=i%4
-            x_pos=0.2+column*0.2
-            y_pos=0.7 if row==0 else 0.40
+            x_pos=0.16+column*0.23
+            y_pos=0.65 if row==0 else 0.30
             btn = ImageButton(
                 source="images/"+name+".png",
                 allow_stretch=False,
                 keep_ratio=True,
                 mipmap=True,
-                size_hint=(0.20, 0.20),
+                size_hint=(0.25, 0.25),
                 pos_hint={"center_x":x_pos,"center_y":y_pos}
             )
             btn.bind(on_press=lambda inst, p=name: self.go_to(p))
@@ -65,10 +62,10 @@ class PlaceScreen(Screen):
         btn_back = ImageButton (
             source="images/back.png",
             size_hint=(None, None),
-            size=(100, 100),
+            size=(130, 130),
             allow_stretch=True,
             keep_ratio=True,
-            pos_hint={"center_x": 0.09,"center_y": 0.15}
+            pos_hint={"center_x": 0.09,"center_y": 0.09}
         )
         btn_back.bind(on_press=go_back)
         root.add_widget(btn_back)

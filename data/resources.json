@@ -71,7 +71,7 @@
     "description": "Profesional encargado de la salud animal.",
     "associated": ["Kit Médico Básico"],
     "exclusions": ["Entrenador Certificado", "Voluntarios Paseadores"],
-    "quantity": 2
+    "quantity": 1
   },
   {
     "name": "Voluntario",

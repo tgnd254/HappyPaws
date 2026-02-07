@@ -1,65 +1,42 @@
 [
     {
-        "title": "Vacunación",
-        "start": "2026-03-05 10:00",
-        "end": "2026-03-05 11:00",
+        "title": "m",
+        "start": "2026-02-07 10:00",
+        "end": "2026-02-07 12:00",
+        "recurrence": "ninguna",
+        "resources": [],
+        "place": "sala_de_procedimientos",
+        "series_id": null
+    },
+    {
+        "title": "m",
+        "start": "2026-02-07 10:00",
+        "end": "2026-02-07 12:00",
+        "recurrence": "ninguna",
+        "resources": [],
+        "place": "sala_de_procedimientos",
+        "series_id": null
+    },
+    {
+        "title": "m",
+        "start": "2026-02-09 10:00",
+        "end": "2026-02-09 12:00",
+        "recurrence": "ninguna",
+        "resources": ["Veterinario",
+            "Kit Médico Básico"],
+        "place": "sala_de_procedimientos",
+        "series_id": null
+    },
+    {
+        "title": "m",
+        "start": "2026-02-08 10:00",
+        "end": "2026-02-08 12:00",
         "recurrence": "ninguna",
         "resources": [
             "Veterinario",
             "Kit Médico Básico"
         ],
-        "place": "sala_de_procedimientos",
+        "place": "sala_quirúrgica",
         "series_id": null
-    },
-    {
-        "title": "Vacunación",
-        "start": "2026-03-07 10:00",
-        "end": "2026-03-07 11:00",
-        "recurrence": "ninguna",
-        "resources": [
-            "Veterinario",
-            "Kit Médico Básico"
-        ],
-        "place": "sala_de_procedimientos",
-        "series_id": null
-    },
-    {
-        "title": "Vacunación",
-        "start": "2026-03-06 10:00",
-        "end": "2026-03-06 11:00",
-        "recurrence": "diaria",
-        "until": "2026-03-08",
-        "resources": [
-            "Veterinario",
-            "Kit Médico Básico"
-        ],
-        "place": "sala_quirúrgica",
-        "series_id": "c36877a1-5fe1-4fc7-820c-1f3cbc516f9d"
-    },
-    {
-        "title": "Control Sanitario",
-        "start": "2026-03-06 09:00",
-        "end": "2026-03-06 10:00",
-        "recurrence": "diaria",
-        "until": "2026-03-08",
-        "resources": [
-            "Veterinario",
-            "Kit Médico Básico"
-        ],
-        "place": "sala_quirúrgica",
-        "series_id": "c36877a1-5fe1-4fc7-820c-1f3cbc516f9d"
-    },
-    {
-        "title": "Control Sanitario",
-        "start": "2026-03-07 09:00",
-        "end": "2026-03-07 10:00",
-        "recurrence": "diaria",
-        "until": "2026-03-08",
-        "resources": [
-            "Veterinario",
-            "Kit Médico Básico"
-        ],
-        "place": "sala_quirúrgica",
-        "series_id": "c36877a1-5fe1-4fc7-820c-1f3cbc516f9d"
     }
 ]
