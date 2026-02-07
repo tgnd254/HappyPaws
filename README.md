@@ -176,7 +176,7 @@ Planificador-de-Eventos/
 │   └── (tipografías .ttf usadas en la interfaz)
 │
 ├── images/
-│   └── (iconos, fondos y botones de la aplicación)
+│   └── (iconos, fondos, botones, go_back, check, etc.)
 │
 ├── .gitignore
 ├── requirements.txt
@@ -186,7 +186,11 @@ Planificador-de-Eventos/
 ├── resources.py
 ├── date.py
 ├── recurrence.py
-└── events.py
+├── events.py
+│
+├── utils.py        ← funciones de lógica y manejo de datos
+└── widgets.py      ← widgets personalizados (RoundedButton, ImageButton, etc.)
+
 ```
 
 
