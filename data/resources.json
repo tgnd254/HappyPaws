@@ -71,7 +71,7 @@
     "description": "Profesional encargado de la salud animal.",
     "associated": ["Kit Médico Básico"],
     "exclusions": ["Entrenador Certificado", "Voluntarios Paseadores"],
-    "quantity": 1
+    "quantity": 2
   },
   {
     "name": "Voluntario",
@@ -129,15 +129,6 @@
     "associated": ["Voluntario de Adopciones"],
     "exclusions": ["Veterinario"],
     "quantity": 1
-  },
-
-  {
-    "name": "Correas y Arneses",
-    "place": ["área_de_alojamiento","exterior","patio_de_ejercicios","sala_de_procedimientos","sala_quirúrgica","área_de_baño","área_de_alimentación","sala_de_entrevistas"],
-    "description": "Equipo de paseo para perros.",
-    "associated": ["Perros"],
-    "exclusions": ["Gatos", "Roedores", "Serpientes", "Conejos", "Aves"],
-    "quantity": 6
   },
   {
     "name": "Escoba Industrial",
@@ -229,6 +220,14 @@
     "quantity": 50
   },
   {
+    "name": "Correas y Arneses",
+    "place": ["área_de_alojamiento","exterior","patio_de_ejercicios","sala_de_procedimientos","sala_quirúrgica","área_de_baño","área_de_alimentación","sala_de_entrevistas"],
+    "description": "Equipo de paseo para perros.",
+    "associated": ["Perros"],
+    "exclusions": ["Gatos", "Roedores", "Serpientes", "Conejos", "Aves"],
+    "quantity": 6
+  },
+  {
     "name": "Caja de Transporte",
     "place": ["área_de_alojamiento","exterior","patio_de_ejercicios","sala_de_procedimientos","sala_quirúrgica","área_de_baño","área_de_alimentación","sala_de_entrevistas"],
     "description": "Transportadora segura para gatos.",
@@ -284,12 +283,28 @@
     "exclusions": ["Gatos", "Roedores", "Perros", "Aves", "Serpientes"],
     "quantity": 3
   },
+   {
+    "name": "Comida Seca",
+    "place": ["área_de_alimentación"],
+    "description": "Alimento balanceado y esencial para la dieta de los gatos.",
+    "associated": ["Gatos"],
+    "exclusions": ["Conejos", "Roedores", "Perros", "Aves", "Serpientes"],
+    "quantity": 4
+  },
+   {
+    "name": "Mezcla de cereales y vegetales",
+    "place": ["área_de_alimentación"],
+    "description": "Mezcla para cubrir las necesidades nutricionales de los roedores del refugio.",
+    "associated": ["Roedores"],
+    "exclusions": ["Gatos", "Conejos", "Perros", "Aves", "Serpientes"],
+    "quantity": 4
+  },
   {
     "name": "Mezcla de Semillas",
     "place": ["área_de_alimentación"],
-    "description": "Mezcla de semillas para aves y roedores.",
-    "associated": ["Aves", "Roedores"],
-    "exclusions": ["Gatos", "Conejos", "Perros", "Serpientes"],
+    "description": "Mezcla de semillas para aves.",
+    "associated": ["Aves"],
+    "exclusions": ["Gatos", "Conejos", "Perros", "Serpientes","Roedores"],
     "quantity": 4
   },
   {
