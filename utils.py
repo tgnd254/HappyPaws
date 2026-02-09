@@ -67,7 +67,7 @@ def resources_available(start,end,selected,resources,events):
 
         # Si hay conflictos, avanzar al final del conflicto más cercano
         if conflicts_ends:
-            current_start=max(conflicts_ends)
+            current_start=min(conflicts_ends)
             current_end=current_start+duration
         else: # No hay forma de avanzar 
             return None, None, list(occupated_resources_set)
