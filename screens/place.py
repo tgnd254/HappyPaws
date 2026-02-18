@@ -5,6 +5,10 @@ from kivy.uix.label import Label
 from kivy.uix.behaviors import ButtonBehavior
 from kivy.uix.screenmanager import Screen
 from widgets import ImageButton
+from kivy.uix.popup import Popup 
+from kivy.clock import Clock
+
+from widgets import show_loading
 
 class PlaceScreen(Screen):
     def __init__(self, **kwargs): 
@@ -76,4 +80,12 @@ class PlaceScreen(Screen):
     def go_to(self,place):
         self.manager.selected_place=place
         self.manager.current="resources"
+    
+    def go_to(self, place): 
+        self.manager.selected_place = place 
+        loading_popup = show_loading("Cargando recursos...")
+        def switch_screen(dt): 
+            loading_popup.dismiss() 
+            self.manager.current = "resources" 
+        Clock.schedule_once(switch_screen, 0.5) # medio segundo de espera
         

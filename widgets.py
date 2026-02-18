@@ -1,4 +1,3 @@
-# widgets.py
 from kivy.uix.image import Image
 from kivy.uix.behaviors import ButtonBehavior
 from kivy.uix.button import Button
@@ -9,10 +8,23 @@ from kivy.uix.label import Label
 from kivy.uix.scrollview import ScrollView 
 from kivy.uix.popup import Popup 
 from kivy.clock import Clock
+from kivy.core.audio import SoundLoader
+
+def play_sound(file="sounds/click.mp3"): 
+    click_sound=SoundLoader.load(file)
+    if click_sound: 
+        click_sound.play()
+
 
 # Botón con imagen 
 class ImageButton(ButtonBehavior, Image):
-    pass
+    def __init__(self, sound_file="sounds/click.mp3", **kwargs): 
+        super().__init__(**kwargs) 
+        self.sound_file = sound_file 
+        self.bind(on_press=self._play_sound) 
+        
+    def _play_sound(self, *args): 
+        play_sound(self.sound_file)
 
 # Botón redondeado
 class RoundedButton(Button):
@@ -27,6 +39,11 @@ class RoundedButton(Button):
             Color(*self.bg_color)
             self.rect = RoundedRectangle(pos=self.pos, size=self.size, radius=[12])
         self.bind(pos=self.update_rect, size=self.update_rect)
+
+        self.bind(on_press=self._play_sound) 
+
+    def _play_sound(self, *args):
+        play_sound()
 
     def update_rect(self, *args):
         self.rect.pos = self.pos
@@ -43,9 +60,11 @@ class RoundedBox(BoxLayout):
             Color(1.0, 0.976, 0.769, 1)
             self.border = RoundedRectangle(pos=self.pos, size=self.size, radius=[12])
             Color(1.0, 0.992, 0.906, 1)
-            self.bg = RoundedRectangle(pos=(self.x+3, self.y+3),
-                                       size=(self.width-6, self.height-6),
-                                       radius=[10])
+            self.bg = RoundedRectangle(
+                pos=(self.x+3, self.y+3),
+                size=(self.width-6, self.height-6),
+                radius=[10]
+            )
         self.bind(pos=self.update_rects, size=self.update_rects)
 
     def update_rects(self, *args):
@@ -61,9 +80,11 @@ def show_message(text, color=(0.243, 0.153, 0.137, 1)):
         Color(1.0, 0.627, 0.478, 1)
         border = RoundedRectangle(pos=content.pos, size=content.size, radius=[20])
         Color(1.0, 0.992, 0.906, 1)
-        bg = RoundedRectangle(pos=(content.x+3, content.y+3),
-                              size=(content.width-6, content.height-6),
-                              radius=[18])
+        bg = RoundedRectangle(
+            pos=(content.x+3, content.y+3),
+            size=(content.width-6, content.height-6),
+            radius=[18]
+        )
 
     def update_rects(*args):
         border.pos = content.pos
@@ -123,3 +144,52 @@ def show_message(text, color=(0.243, 0.153, 0.137, 1)):
     )
     btn_close.bind(on_press=lambda inst: popup.dismiss())
     popup.open()
+
+#Metodo para mostrar mensaje de cargando
+def show_loading(text="Cargando recursos...", color=(0.243, 0.153, 0.137, 1)):
+    content = FloatLayout()
+    with content.canvas.before:
+        Color(1.0, 0.627, 0.478, 1)  
+        border = RoundedRectangle(pos=content.pos, size=content.size, radius=[20])
+        Color(1.0, 0.992, 0.906, 1) 
+        bg = RoundedRectangle(
+            pos=(content.x+3, content.y+3),
+            size=(content.width-6, content.height-6),
+            radius=[18]
+        )
+
+    def update_rects(*args):
+        border.pos = content.pos
+        border.size = content.size
+        bg.pos = (content.x+3, content.y+3)
+        bg.size = (content.width-6, content.height-6)
+
+    content.bind(pos=update_rects, size=update_rects)
+    Clock.schedule_once(lambda dt: update_rects(), 0)
+
+    lbl = Label(
+        text=text,
+        font_size="30sp",
+        font_name="fonts/OpenSans-Bold.ttf",
+        color=color,
+        halign="center",
+        valign="middle",
+        size_hint=(1, 1),
+        pos_hint={"center_x": 0.5, "center_y": 0.5},
+        text_size=(500, None)
+    )
+    content.add_widget(lbl)
+
+    popup = Popup(
+        title="",
+        content=content,
+        size_hint=(None, None),
+        auto_dismiss=False,
+        size=(600, 200),
+        background="",
+        background_color=(0, 0, 0, 0),
+        separator_color=(0, 0, 0, 0)
+    )
+    popup.open()
+    return popup
+

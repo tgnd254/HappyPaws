@@ -81,7 +81,22 @@ class ResourcesScreen(Screen):
                 g.size = (widget.width-6, widget.height-6)
             card.bind(pos=update_card, size=update_card)
             Clock.schedule_once(lambda dt: update_card(card,None), 0)
-            
+
+            animal_sounds = { 
+                "perros": "sounds/bark.mp3", 
+                "gatos": "sounds/meow.mp3", 
+                "conejos": "sounds/rabbit.mp3", 
+                "aves": "sounds/bird.mp3", 
+                "serpientes": "sounds/snake.mp3", 
+                "roedores": "sounds/rodent.mp3" 
+            }
+            resource_name = r["name"].lower() 
+            sound_file = None 
+            for animal, sound in animal_sounds.items(): 
+                if animal in resource_name: 
+                    sound_file = sound 
+                    break
+
             # Mostrar imagen de los recursos
             btn = ImageButton(
                 source="images/" + r["name"].lower().replace(" ", "_")+ ".png",
@@ -89,13 +104,14 @@ class ResourcesScreen(Screen):
                 size_hint=(None, None),
                 size=(150, 150),
                 allow_stretch=False,
-                keep_ratio=True
+                keep_ratio=True,
+                sound_file=sound_file if sound_file else "sounds/click.mp3"
             )
             btn.resource = r
             btn.bind(on_press=lambda inst, res=r: self.toggle_resource(res))
 
             # Mostrar nombre y descripcion de los recursos
-            info_box = BoxLayout(orientation="vertical", spacing=8 ,padding=(5,10))
+            info_box = BoxLayout(orientation="vertical", spacing=10 ,padding=(5,5))
 
             name_label = Label(
                 text=r["name"],
@@ -105,7 +121,7 @@ class ResourcesScreen(Screen):
                 halign="left",
                 valign="bottom",
                 size_hint_y=None,
-                height=25, 
+                height=50, 
             )
             name_label.bind(size=lambda inst, val: setattr(inst, "text_size", (val[0], None)))
 
@@ -117,12 +133,25 @@ class ResourcesScreen(Screen):
                 halign="left",
                 valign="top",
                 size_hint_y=None,
-                height=60
+                height=40
             )
             desc_label.bind(size=lambda inst, val: setattr(inst, "text_size", (val[0], None)))
 
+            quant_label= Label(
+                text=f"Cantidad: {r.get('quantity', '')}",
+                font_size="20sp",
+                font_name="fonts/Roboto-Medium.ttf",
+                color=(0.243, 0.153, 0.137, 1),
+                halign="left",
+                valign="top",
+                size_hint_y=None,
+                height=40
+            )
+            quant_label.bind(size=lambda inst, val: setattr(inst, "text_size", (val[0], None)))
+
             info_box.add_widget(name_label)
             info_box.add_widget(desc_label)
+            info_box.add_widget(quant_label)
 
             card.add_widget(btn)
             card.add_widget(info_box) 

@@ -16,11 +16,11 @@ from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.core.window import Window
 from widgets import ImageButton
 
-from place import PlaceScreen
-from resources import ResourcesScreen
-from date import DateScreen
-from events import EventsScreen
-from recurrence import RecurrenceScreen
+from screens import PlaceScreen
+from screens import ResourcesScreen
+from screens import DateScreen
+from screens import EventsScreen
+from screens import RecurrenceScreen
 
 class HomeScreen(Screen):
     def __init__(self, **kwargs):
@@ -51,7 +51,7 @@ class HomeScreen(Screen):
     def go_to_events(self,instance):
         self.manager.current="events"
 
-class FirstWindow(App): 
+class HappyPaws(App): 
     def build(self): 
         sm = ScreenManager() 
         sm.selected_place = None
@@ -66,4 +66,4 @@ class FirstWindow(App):
         
                                
 if __name__ == "__main__":
-    FirstWindow().run()
+    HappyPaws().run()
