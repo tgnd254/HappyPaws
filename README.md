@@ -178,18 +178,25 @@ Planificador-de-Eventos/
 ├── images/
 │   └── (iconos, fondos, botones, go_back, check, etc.)
 │
+├── sounds/
+│   └── (bark.mp3, meow.mp3, rabbit.mp3, bird.mp3, snake.mp3, rodent.mp3, click.mp3, etc.)
+│
+├── Screens/
+│   ├── __init__.py              ← convierte la carpeta en paquete
+│   ├── place.py                 ← pantalla PlaceScreen
+│   ├── resources.py             ← pantalla ResourcesScreen
+│   ├── date.py                  ← pantalla DateScreen
+│   ├── events.py                ← pantalla EventsScreen
+│   └── recurrence.py            ← pantalla RecurrenceScreen
+│
 ├── .gitignore
 ├── requirements.txt
 │
-├── main.py
-├── place.py
-├── resources.py
-├── date.py
-├── recurrence.py
-├── events.py
+├── main.py                      ← archivo principal que arranca la app
 │
-├── utils.py        ← funciones de lógica y manejo de datos
-└── widgets.py      ← widgets personalizados (RoundedButton, ImageButton, etc.)
+├── utils.py                     ← funciones de lógica y manejo de datos
+└── widgets.py                   ← widgets personalizados (RoundedButton, ImageButton, etc.)
+
 
 ```
 
