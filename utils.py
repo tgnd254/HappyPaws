@@ -9,6 +9,8 @@ def load_events():
             return json.load(f)
     except FileNotFoundError:
         return []
+    except json.JSONDecodeError:
+        return []
 
 # Guardar eventos
 def save_events(events):
@@ -40,16 +42,45 @@ def resources_available(start,end,selected,resources,events):
     while True:
         unavailable=[]
         for sr in selected:
-            quantity=resource_quantities.get(sr,0) #Obtener la cantidad del recurso
-            count=0 # Contador de eventos que utilizan el recurso
+            max_quantity=resource_quantities.get(sr,0) #Obtener la cantidad del recurso
+            overlapping_events=[]
 
             for ev in events_sorted:
                 if current_end > ev["start"] and current_start < ev["end"]: # Verificar solapamiento
                     if sr in ev["resources"]:
-                        count+=1
+                        overlapping_events.append(ev)
 
-            # Verificar si el recurso está disponible
-            if count>=quantity:
+            #Si no hay solapamientos se pasa al siguiente recurso
+            if not overlapping_events:
+                continue
+            
+            #Guardar los puntos de cambio dentro del intervalo del evento deseado(cuando termina o empieza un nuevo evento)
+            timestamps={current_start,current_end}
+            for ev in overlapping_events:
+                if current_start<ev["start"]<current_end:
+                    timestamps.add(ev["start"])
+                if current_start<ev["end"]<current_end:
+                    timestamps.add(ev["end"])
+
+            sorted_timestamps = sorted(list(timestamps))
+            
+            #Por cada subintervalo verifico la cantidad del recurso que esta siendo usado
+            resource_blocked=False
+            for i in range(len(sorted_timestamps)-1):
+                sub_start=sorted_timestamps[i]
+                sub_end=sorted_timestamps[i+1]
+
+                count=0
+                for ev in overlapping_events:
+                    if ev["start"] <= sub_start and ev["end"] >= sub_end:
+                        count+=1
+                
+                #Si la cantidad siendo usada es mayor o igual a la cantidad existente en el refugio entonces hay un conflicto
+                if count>=max_quantity:
+                    resource_blocked=True
+                    break
+                
+            if resource_blocked:
                 unavailable.append(sr)
 
         occupated_resources_set.update(unavailable)

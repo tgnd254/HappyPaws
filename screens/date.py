@@ -175,6 +175,16 @@ class DateScreen(Screen):
         if start < now:
             show_message("La fecha de inicio no puede ser anterior al momento actual")
             return
+        
+        #Si el evento dura mas de 24h mostrar error
+        if end-start>timedelta(hours=24):
+            show_message("La duración del evento no puede ser superior a 24 horas.")
+            return
+
+        #Si el evento esta planificado un año después de la fecha actual mostrar error
+        if start > datetime.now() + timedelta(days=365):
+            show_message("Los datos del refugio son restaurados cada año, no puedes planificar un evento un año después de la fecha actual.")
+            return
 
         resources = self.manager.selected_resources
         suggested_start, suggested_end, occupied = resources_available(start, end, resources, self.resources_info, self.events)

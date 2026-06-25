@@ -1,133 +1,79 @@
 [
     {
-        "title": "Cirugía Ortopédica Firulais",
-        "start": "2026-07-10 09:00",
-        "end": "2026-07-10 11:30",
+        "title": "Esterilización de Firulais",
+        "start": "2026-06-26 08:00",
+        "end": "2026-06-26 11:00",
         "recurrence": "ninguna",
         "resources": [
             "Veterinario",
             "Kit Médico Básico",
             "Instrumental Quirúrgico",
-            "Perros",
-            "Correas y Arneses"
+            "Correas y Arneses",
+            "Perros"
         ],
         "place": "sala_quirúrgica",
         "series_id": null
     },
     {
-        "title": "Campaña de Vacunación Canina",
-        "start": "2026-07-10 10:00",
-        "end": "2026-07-10 13:00",
-        "recurrence": "ninguna",
+        "title": "Alimentación de los misus",
+        "start": "2026-06-25 18:00",
+        "end": "2026-06-25 18:30",
+        "recurrence": "diaria",
+        "until": "2026-07-25",
         "resources": [
-            "Vacuna Séxtuple Canina",
-            "Veterinario",
-            "Kit Médico Básico",
-            "Correas y Arneses",
-            "Perros"
+            "Voluntario",
+            "Vasijas de Acero",
+            "Comida Seca",
+            "Gatos",
+            "Caja de Transporte"
         ],
-        "place": "sala_de_procedimientos",
-        "series_id": null
+        "place": "área_de_alimentación",
+        "series_id": "77c8bfba-46e3-4b9f-9734-f1fe374e8e6d"
     },
     {
-        "title": "Taller de Manejo de Réptiles Exóticos",
-        "start": "2026-07-10 14:00",
-        "end": "2026-07-10 16:00",
+        "title": "Alimentación de los misus",
+        "start": "2026-06-26 18:00",
+        "end": "2026-06-26 18:30",
+        "recurrence": "diaria",
+        "until": "2026-07-25",
+        "resources": [
+            "Voluntario",
+            "Vasijas de Acero",
+            "Comida Seca",
+            "Gatos",
+            "Caja de Transporte"
+        ],
+        "place": "área_de_alimentación",
+        "series_id": "77c8bfba-46e3-4b9f-9734-f1fe374e8e6d"
+    },
+    {
+        "title": "Adopción de Stuart Little",
+        "start": "2026-07-12 09:00",
+        "end": "2026-07-12 13:00",
         "recurrence": "ninguna",
         "resources": [
-            "Serpientes",
-            "Terrario Especial",
+            "Roedores",
             "Voluntario de Adopciones",
+            "Jaula de Transporte",
             "Cámara Digital"
         ],
         "place": "sala_de_entrevistas",
         "series_id": null
     },
     {
-        "title": "Exhibición de réptiles",
-        "start": "2026-07-10 15:00",
-        "end": "2026-07-10 17:00",
+        "title": "Feria de exhibición de serpientes",
+        "start": "2026-08-20 13:00",
+        "end": "2026-08-20 17:00",
         "recurrence": "ninguna",
         "resources": [
-            "Carpa de Exhibición",
             "Voluntario",
-            "Folletos Informativos",
             "Vehículo Petmóvil",
+            "Terrario Especial",
             "Serpientes",
-            "Terrario Especial"
+            "Folletos Informativos",
+            "Carpa de Exhibición"
         ],
         "place": "exterior",
-        "series_id": null
-    },
-    {
-        "title": "Monitoreo Post Operatorio",
-        "start": "2026-07-10 11:30",
-        "end": "2026-07-11 17:30",
-        "recurrence": "diaria",
-        "until": "2026-07-13",
-        "resources": [
-            "Veterinario",
-            "Kit Médico Básico"
-        ],
-        "place": "sala_de_procedimientos",
-        "series_id": "2d4e5da6-cc50-489b-b6a1-1147bbde42bf"
-    },
-    {
-        "title": "Monitoreo Post Operatorio",
-        "start": "2026-07-11 11:30",
-        "end": "2026-07-12 17:30",
-        "recurrence": "diaria",
-        "until": "2026-07-13",
-        "resources": [
-            "Veterinario",
-            "Kit Médico Básico"
-        ],
-        "place": "sala_de_procedimientos",
-        "series_id": "2d4e5da6-cc50-489b-b6a1-1147bbde42bf"
-    },
-    {
-        "title": "Esterilización de Kitty",
-        "start": "2026-07-13 08:00",
-        "end": "2026-07-13 12:00",
-        "recurrence": "ninguna",
-        "resources": [
-            "Gatos",
-            "Instrumental Quirúrgico",
-            "Kit Médico Básico",
-            "Veterinario",
-            "Caja de Transporte"
-        ],
-        "place": "sala_quirúrgica",
-        "series_id": null
-    },
-    {
-        "title": "Vacunación de conejos",
-        "start": "2026-07-13 10:00",
-        "end": "2026-07-13 14:00",
-        "recurrence": "ninguna",
-        "resources": [
-            "Vacuna Combinada para Conejos",
-            "Veterinario",
-            "Kit Médico Básico",
-            "Conejos",
-            "Jaula de Transporte"
-        ],
-        "place": "sala_de_procedimientos",
-        "series_id": null
-    },
-    {
-        "title": "Desparasitación de aves",
-        "start": "2026-07-13 12:00",
-        "end": "2026-07-13 16:00",
-        "recurrence": "ninguna",
-        "resources": [
-            "Ivermectina Oral",
-            "Veterinario",
-            "Kit Médico Básico",
-            "Aves",
-            "Jaula de Transporte"
-        ],
-        "place": "sala_de_procedimientos",
         "series_id": null
     }
 ]

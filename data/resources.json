@@ -351,7 +351,7 @@
     "name": "Roedores",
     "place": ["área_de_alojamiento","exterior","patio_de_ejercicios","sala_de_procedimientos","sala_quirúrgica","área_de_baño","área_de_alimentación","sala_de_entrevistas"],
     "description": "Grupo de roedores disponibles en el refugio.",
-    "associated": ["Jaula de transporte"],
+    "associated": ["Jaula de Transporte"],
     "exclusions": ["Vacuna Combinada para Aves", "Vacuna Combinada para Conejos", "Vacuna Triple Felina", "Vacuna Séxtuple Canina"],
     "quantity": 4
   }

@@ -1,4 +1,4 @@
-# main.py
+
 from kivy.config import Config 
 
 # Bloquear redimensionamiento 
