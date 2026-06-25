@@ -16,6 +16,9 @@ from kivy.uix.popup import Popup
 from widgets import ImageButton,RoundedButton,RoundedBox,show_message
 from utils import load_events,load_resources,save_events,resources_available
 
+# Importar calendario y reloj ya creados
+from kivymd.uix.pickers import MDDatePicker, MDTimePicker
+
 class RecurrenceScreen(Screen):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -51,13 +54,15 @@ class RecurrenceScreen(Screen):
         # Campo para la fecha de finalización
         box_until = RoundedBox(size_hint=(0.5,0.1), pos_hint={"center_x":0.5,"center_y":0.5})
         self.input_until = TextInput(
-            hint_text="Repetir hasta (YYYY-MM-DD)",
+            hint_text="Repetir hasta (YYYY-MM-DD), sin incluir ese día",
             background_color=(0,0,0,0),
             font_name="fonts/OpenSans-Bold.ttf",
             foreground_color=(0.251, 0.765, 0.851, 1),
             font_size="20sp",
-            multiline=False
+            multiline=False,
+            readonly=True
         )
+        self.input_until.bind(focus=lambda inst, foc: self.open_assistant(self.input_until) if foc else None)
         box_until.add_widget(self.input_until)
         root.add_widget(box_until)
 
@@ -73,8 +78,9 @@ class RecurrenceScreen(Screen):
         btn_continue.bind(on_press=self.process_recurrence)
         root.add_widget(btn_continue)
 
-        # Botón para volver
+        # Botón para retroceder
         def go_back(inst):
+            self.manager.transition.direction="right"
             self.manager.current="date"
 
         btn_back = ImageButton (
@@ -89,6 +95,24 @@ class RecurrenceScreen(Screen):
         root.add_widget(btn_back)
 
         self.add_widget(root)
+    
+    #Metodo para abrir el calendario
+    def open_assistant(self,target_input):
+        target_input.focus=False
+
+        date_dialog = MDDatePicker()
+
+        date_dialog.bind(
+            on_save=lambda instance, val, date_range: self.capture_date(val, target_input, instance),
+            on_cancel=date_dialog.dismiss
+        )
+        date_dialog.open()
+    
+    #Metodo para guardar la fecha como un string
+    def capture_date(self, date_obj, target_input, date_dialog_instance):
+        date_dialog_instance.dismiss()
+        date_str = date_obj.strftime("%Y-%m-%d")
+        target_input.text = f"{date_str}"
 
     # Método para procesar la recurrencia
     def process_recurrence(self, *args):
@@ -103,9 +127,9 @@ class RecurrenceScreen(Screen):
 
         # Mostrar mensaje de error si el formato es inválido
         try:
-            until = datetime.strptime(until_text, "%Y-%m-%d")
+            until = datetime.strptime(self.input_until.text.strip(), "%Y-%m-%d")
         except:
-            show_message("Formato inválido para. Use YYYY-MM-DD")
+            show_message("Debe rellenar la fecha de fin de la recurrencia")
             return
 
         # Mostrar mensaje de error si la fecha 'Repetir hasta' es inferior a la de fin
@@ -137,17 +161,32 @@ class RecurrenceScreen(Screen):
         while current <= until:
             occurrences.append((current, current + (end - start)))
             current += delta
+        
+        if not occurrences:
+            show_message(
+                "El rango de fechas seleccionado o la fecha límite "
+                "no permiten generar ninguna ocurrencia para este evento.",
+            )
+            return
 
         events = load_events()
         resources_info = load_resources()
         conflicts = []
+        simulated_events=list(events) # Clonamos la lista de eventos para simular la inserción progresiva y detectar conflictos internos
 
         # Verificar conflictos de recursos para cada ocurrencia
         for occ_start, occ_end in occurrences:
-            sug_start, sug_end, occupied = resources_available(occ_start, occ_end, resources, resources_info, events)
+            sug_start, sug_end, occupied = resources_available(occ_start, occ_end, resources, resources_info, simulated_events)
             if sug_start != occ_start or sug_end != occ_end:
                 conflicts.append((occ_start, occ_end, sug_start, sug_end, occupied))
-
+            else:
+                # Si la ocurrencia es válida, la indexamos temporalmente para que la siguiente repetición la considere
+                simulated_events.append({
+                    "start": occ_start.strftime("%Y-%m-%d %H:%M"),
+                    "end": occ_end.strftime("%Y-%m-%d %H:%M"),
+                    "resources": resources
+                })
+            
         # Si hay conflictos, mostrar sugerencias
         text=""
         if conflicts:
@@ -174,3 +213,10 @@ class RecurrenceScreen(Screen):
         save_events(events)
         
         show_message("Evento recurrente creado exitosamente", color=(0, 0.6, 0, 1))
+
+        self.input_recurrence.text = ""
+        self.input_until.text = ""
+        
+        # Redirección automática al Home tras guardar exitosamente
+        self.manager.current = "home"
+        self.manager.transition.direction="left"

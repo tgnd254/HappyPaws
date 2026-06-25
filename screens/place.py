@@ -61,6 +61,7 @@ class PlaceScreen(Screen):
 
         # Crear botón de retroceso
         def go_back(inst):
+            self.manager.transition.direction="right"
             self.manager.current="home"
 
         btn_back = ImageButton (
@@ -76,16 +77,15 @@ class PlaceScreen(Screen):
 
         self.add_widget(root)
 
-    # Método para cambiar a la pantalla de recursos
-    def go_to(self,place):
-        self.manager.selected_place=place
-        self.manager.current="resources"
-    
+    # Método para mostrar mensaje de "cargando" antes de cambiar a la pantalla de recursos
     def go_to(self, place): 
         self.manager.selected_place = place 
         loading_popup = show_loading("Cargando recursos...")
+
         def switch_screen(dt): 
             loading_popup.dismiss() 
+            self.manager.transition.direction="left"
             self.manager.current = "resources" 
+        
         Clock.schedule_once(switch_screen, 0.5) # medio segundo de espera
         

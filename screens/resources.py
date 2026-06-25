@@ -17,14 +17,15 @@ from utils import load_events,load_resources,save_events,validate_resources
 class ResourcesScreen(Screen):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-
         self.resources = load_resources()
-
         self.selected_resources = []
         self.buttons = {}
     
     def on_pre_enter(self):
-        # Limpiar widgets anteriores
+        # Limpiar selecciones previas para nuevos eventos
+        self.selected_resources = []
+        self.buttons = {}
+
         self.clear_widgets()
 
         root = FloatLayout()
@@ -74,6 +75,7 @@ class ResourcesScreen(Screen):
                 border = RoundedRectangle(pos=card.pos, size=card.size, radius=[15])
                 Color(1.0, 0.992, 0.906, 1)   
                 bg = RoundedRectangle(pos=(card.x+3, card.y+3), size=(card.width-6, card.height-6), radius=[12])
+
             def update_card(instance, value, b=border, g=bg, widget=card): 
                 b.pos = widget.pos 
                 b.size = widget.size 
@@ -92,9 +94,12 @@ class ResourcesScreen(Screen):
             }
             resource_name = r["name"].lower() 
             sound_file = None 
+
+            #Reproducir el archivo de sonido correspondiente a cada animal
             for animal, sound in animal_sounds.items(): 
-                if animal in resource_name: 
+                if animal == resource_name: 
                     sound_file = sound 
+                    print(animal)
                     break
 
             # Mostrar imagen de los recursos
@@ -136,7 +141,8 @@ class ResourcesScreen(Screen):
                 height=40
             )
             desc_label.bind(size=lambda inst, val: setattr(inst, "text_size", (val[0], None)))
-
+            
+            #Mostrar cantidad existente del recurso 
             quant_label= Label(
                 text=f"Cantidad: {r.get('quantity', '')}",
                 font_size="20sp",
@@ -175,8 +181,9 @@ class ResourcesScreen(Screen):
         btn_continue.bind(on_press=self.try_continue)
         root.add_widget(btn_continue)
 
-        # Botón para volver
+        # Botón para retroceder 
         def go_back(inst):
+            self.manager.transition.direction="right"
             self.manager.current="place"
 
         btn_back = ImageButton (
@@ -198,13 +205,15 @@ class ResourcesScreen(Screen):
         # Si el recurso esta seleccionado se muestra en azul
         if name not in self.selected_resources:
             self.selected_resources.append(name)
+            self.buttons[name].is_selected= True
             self.buttons[name].color = (0.5, 0.7, 1, 1)
         # Si el recurso no está seleccionado se muestra en blanco
         else:
             self.selected_resources.remove(name)
+            self.buttons[name].is_selected= False
             self.buttons[name].color = (1, 1, 1, 1)
 
-    # Método para continuar. Verificar si no quedan errores
+    # Método para ir a la pantalla de fecha. Verificar si no quedan errores
     def try_continue(self, instance):
         errors = validate_resources(self.resources,self.selected_resources)
         if errors:
@@ -212,4 +221,5 @@ class ResourcesScreen(Screen):
             return
         
         self.manager.selected_resources = self.selected_resources
+        self.manager.transition.direction="left"
         self.manager.current = "date"

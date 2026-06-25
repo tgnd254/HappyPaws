@@ -54,13 +54,37 @@ class EventsScreen(Screen):
 
         for idx, ev in enumerate(self.events):
             # Contenedor horizontal para cada evento
-            row = RoundedBox(orientation="horizontal", size_hint_y=None, height=80)
+            try :
+                event_date=datetime.strptime(ev["start"], "%Y-%m-%d %H:%M")
+                past=event_date < datetime.now()
+            except (ValueError, KeyError):
+                past=False
+            
+            #Si el evento es anterior a la fecha actual se muestra en un rectangulo gris
+            if past:
+                border=(0.75, 0.75, 0.75, 1)
+                background = (0.90, 0.90, 0.90, 1)
+                text_color = (0.2, 0.2, 0.2, 1)
+            #Si el evento no es anterior a la fecha actual se muestra en un rectangulo crema
+            else:
+                border = (1.0, 0.976, 0.769, 1)
+                background = (1.0, 0.992, 0.906, 1)
+                text_color = (0.2, 0.2, 0.2, 1)
+
+            row = RoundedBox(
+                orientation="horizontal", 
+                size_hint_y=None, 
+                height=100, 
+                border_color=border, 
+                bg_color=background
+            )
+
             # Nombre del evento 
             lbl = Label(
                 text=ev["title"],
                 font_size="20sp",
                 font_name="fonts/OpenSans-Bold.ttf",
-                color = (0.200, 0.200, 0.200, 1),
+                color = text_color,
                 halign="left",
                 valign="middle",
                 size_hint_x=1,
@@ -109,6 +133,7 @@ class EventsScreen(Screen):
 
         # Botón para volver a la pantalla principal
         def go_back(inst):
+            self.manager.transition.direction="right"
             self.manager.current="home"
 
         btn_back = ImageButton (
@@ -126,15 +151,19 @@ class EventsScreen(Screen):
 
     # Función para confirmar la eliminación de un evento
     def confirm_delete(self, index):
+
         event = self.events[index]
         series_id = event.get("series_id", None)
 
         content = FloatLayout()
+
+        #Configurar Rectangulo Redondeado de fondo
         with content.canvas.before: 
             Color(0.200, 0.200, 0.200, 1) 
             border=RoundedRectangle(pos=content.pos, size=content.size, radius=[20]) 
             Color(1.0, 0.992, 0.906, 1) 
             bg=RoundedRectangle(pos=(content.x+3, content.y+3), size=(content.width-6, content.height-6), radius=[18]) 
+
         def update_rects(*args): 
             border.pos = content.pos 
             border.size = content.size 
@@ -238,98 +267,115 @@ class EventsScreen(Screen):
     def show_details(self, index):
         event = self.events[index]
 
-        # Contenedor principal del popup
         content = FloatLayout()
         with content.canvas.before: 
-            Color(0.200, 0.200, 0.200, 1)
-            border=RoundedRectangle(pos=content.pos, size=content.size, radius=[20]) 
-            Color(1.0, 0.992, 0.906, 1) 
-            bg=RoundedRectangle(pos=(content.x+3, content.y+3), size=(content.width-6, content.height-6), radius=[18]) 
+            Color(0.200, 0.200, 0.200, 1) # Borde oscuro
+            border = RoundedRectangle(pos=content.pos, size=content.size, radius=[20]) 
+            Color(1.0, 0.992, 0.906, 1) # Fondo crema
+            bg = RoundedRectangle(pos=(content.x+3, content.y+3), size=(content.width-6, content.height-6), radius=[18]) 
+            
         def update_rects(*args): 
             border.pos = content.pos 
             border.size = content.size 
-            bg.pos = (content.x+3, content.y+3) 
-            bg.size = (content.width-6, content.height-6) 
+            bg.pos = (content.x+3, content.y+2) 
+            bg.size = (content.width-6, content.height-9) 
         content.bind(pos=update_rects, size=update_rects) 
         Clock.schedule_once(lambda dt: update_rects(), 0)
 
+        # Contenedor vertical principal que organiza el título, los datos y el botón
+        main_layout = BoxLayout(
+            orientation="vertical",
+            pos_hint={"center_x": 0.5, "center_y": 0.5},
+            padding=[35, 25, 35, 5],
+            spacing=30,
+            size_hint=(1, 0.9)
+        )
+
+        #TÍTULO DESTACADO
+        title_lbl = Label(
+            text="Detalles del Evento",
+            font_size="30sp",
+            font_name="fonts/OpenSans-Bold.ttf",
+            color=(0.200, 0.200, 0.200, 1),
+            halign="center",
+            size_hint_y=None,
+            height=35
+        )
+        main_layout.add_widget(title_lbl)
+
+        #SCROLLVIEW PARA LOS DETALLES
         scroll = ScrollView( 
-            size_hint=(1, 0.6), 
-            pos_hint={"center_x": 0.5, "center_y": 0.65}, 
+            size_hint=(1, 0.8), 
+            pos_hint={"center_x": 0.5, "center_y": 0.65},
             do_scroll_x=False,
             do_scroll_y=True,
-            bar_width=12,
+            bar_width=8,
             bar_color=(0.200, 0.200, 0.200, 1),
             scroll_type=['bars']
         )
 
-        box = BoxLayout(orientation="vertical", spacing=15, padding=20, size_hint_y=None) 
-        box.bind(minimum_height=box.setter("height"))
-
         start = event.get("start", "—")
         end = event.get("end", "—")
         resources = event.get("resources", [])
-        recurrence = event.get("recurrence", "No recurrente")
+        recurrence = event.get("recurrence", "Ninguna")
 
-        date=Label(
-            text=f"Inicio: {start}\nFin: {end}",
-            font_name="fonts/OpenSans-Bold.ttf",
-            font_size="20sp",
-            color=(0.200, 0.200, 0.200, 1),
-            size_hint_y=None, 
-            height=60
+        resources_list = "\n".join([f"      • {r}" for r in resources])
+        if not resources_list:
+            resources_list = "      • Ninguno asignado"
+
+        info_text = (
+            f"  [size=25]Horario[/size]\n"
+            f"[font=fonts/Roboto-Medium.ttf][size=23]      Inicio:  {start}\n"
+            f"      Fin:     {end}[/size][/font]\n\n"
+            f"  [size=25]Recursos Asignados[/size]\n"
+            f"[font=fonts/Roboto-Medium.ttf][size=23]{resources_list}[/size][/font]\n\n"
+            f"  [size=25]Recurrencia[/size]\n"
+            f"[font=fonts/Roboto-Medium.ttf][size=23]      {recurrence.capitalize()}[/size][/font]"
         )
-        date.bind(texture_size=lambda inst, val: setattr(date, "height", val[1])) 
-        box.add_widget(date)
-
-        recursos_text = "Recursos:\n" + "\n".join(f"- {r}" for r in resources)
-        resources_lbl=Label(
-            text=recursos_text,
+        info_lbl = Label(
+            text=info_text,
             font_name="fonts/OpenSans-Bold.ttf",
-            font_size="20sp",
             color=(0.200, 0.200, 0.200, 1),
+            halign="left",
+            valign="top",
+            markup=True,
             size_hint_y=None
         )
-        resources_lbl.bind(texture_size=lambda inst, val: setattr(resources_lbl, "height", val[1])) 
-        box.add_widget(resources_lbl)
 
-        # Etiqueta de recurrencia
-        recurrence_lbl=Label(
-            text=f"Recurrencia: {recurrence}",
-            font_name="fonts/OpenSans-Bold.ttf",
-            font_size="20sp",
-            color=(0.200, 0.200, 0.200, 1),
-            size_hint_y=None, 
-            height=40
+        info_lbl.bind(
+            size=lambda inst, val: setattr(inst, "text_size", (val[0], None)),
+            texture_size=lambda inst, val: setattr(inst, "height", val[1])
         )
-        recurrence_lbl.bind(texture_size=lambda inst, val: setattr(recurrence_lbl, "height", val[1])) 
-        box.add_widget(recurrence_lbl)
+        
+        scroll.add_widget(info_lbl)
+        main_layout.add_widget(scroll)
 
-        scroll.add_widget(box)
-        content.add_widget(scroll)
-
-        # Botón cerrar
+        btn_container = FloatLayout(size_hint_y=None, height=50)
+        
         btn_close = RoundedButton(
             text="Cerrar",
-            font_size="18sp",
+            font_size="22sp",
             font_name="fonts/Roboto-Medium.ttf",
             size_hint=(None, None),
-            size=(160, 45),
-            background_color=(1.0, 0.627, 0.478, 1),
-            pos_hint={"center_x": 0.5, "center_y": 0.2},
+            size=(160, 50),
+            background_color=(1.0, 0.627, 0.478, 1), 
+            pos_hint={"center_x": 0.5, "center_y": 0.3},
             color=(1, 1, 1, 1)
         )
-        btn_close.bind(on_press=lambda inst: popup.dismiss())
-        content.add_widget(btn_close)
+        btn_container.add_widget(btn_close)
+        main_layout.add_widget(btn_container)
+
+        content.add_widget(main_layout)
 
         popup = Popup(
             title="",
             content=content,
-            size_hint=(None,None),
+            size_hint=(None, None),
             auto_dismiss=False,
-            size=(600,250),
+            size=(550, 420), 
             background="",
-            background_color=(0,0,0,0), 
-            separator_color=(0,0,0,0)
+            background_color=(0, 0, 0, 0), 
+            separator_color=(0, 0, 0, 0)
         )
+        btn_close.bind(on_press=lambda inst: popup.dismiss())
         popup.open()

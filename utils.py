@@ -1,6 +1,6 @@
 
 import json
-from datetime import datetime
+from datetime import datetime,timedelta
 
 # Cargar eventos
 def load_events():
@@ -20,28 +20,31 @@ def load_resources():
     with open("data/resources.json", "r", encoding="utf-8") as f:
         return json.load(f)
 
-# Metodo para verificar disponibilidad de recursos 
+# Metodo para verificar disponibilidad de recursos y buscar el siguiente hueco libre si existen colisiones
 def resources_available(start,end,selected,resources,events):
     duration=end-start
     current_start,current_end=start,end
     occupated_resources_set=set() # Mantener registro de recursos ocupados
-    events_sorted = sorted(events, key=lambda ev: ev["start"]) # Ordenar eventos por fecha de inicio
+
+    resource_quantities = {r["name"]: r["quantity"] for r in resources} #Mapear recursos a sus cantidades
+
+    events_sorted = []
+    for ev in events:
+        events_sorted.append({
+            "start": datetime.strptime(ev["start"], "%Y-%m-%d %H:%M"),
+            "end": datetime.strptime(ev["end"], "%Y-%m-%d %H:%M"),
+            "resources": ev["resources"]
+        })
+    events_sorted.sort(key=lambda ev: ev["start"]) #Eventos ordenados por su fecha de inicio
 
     while True:
         unavailable=[]
         for sr in selected:
+            quantity=resource_quantities.get(sr,0) #Obtener la cantidad del recurso
             count=0 # Contador de eventos que utilizan el recurso
 
-            # Obtener la cantidad del recurso
-            for r in resources:
-                if r["name"]==sr:
-                    quantity=r["quantity"]
-                    break
-
             for ev in events_sorted:
-                ev_start = datetime.strptime(ev["start"], "%Y-%m-%d %H:%M") 
-                ev_end = datetime.strptime(ev["end"], "%Y-%m-%d %H:%M") 
-                if not (current_end <= ev_start or current_start >= ev_end): # Verificar solapamiento
+                if current_end > ev["start"] and current_start < ev["end"]: # Verificar solapamiento
                     if sr in ev["resources"]:
                         count+=1
 
@@ -51,26 +54,31 @@ def resources_available(start,end,selected,resources,events):
 
         occupated_resources_set.update(unavailable)
 
-        # Si no hay recursos no disponibles devolver la fecha actual
+        # Si no hay recursos ocupados en este intervalo, devolver la fecha actual
         if not unavailable: 
             return current_start, current_end, list(occupated_resources_set)
         
         conflicts_ends=[]
         for ev in events_sorted:
-            ev_start = datetime.strptime(ev["start"], "%Y-%m-%d %H:%M") 
-            ev_end = datetime.strptime(ev["end"], "%Y-%m-%d %H:%M")
             for r in unavailable:
                 if r in ev["resources"]:
-                    if not (current_end <= ev_start or current_start >= ev_end): # Verificar solapamiento
-                        conflicts_ends.append(ev_end)
+                    if current_end > ev["start"] and current_start < ev["end"]: # Verificar solapamiento
+                        conflicts_ends.append(ev["end"])
                     break
 
         # Si hay conflictos, avanzar al final del conflicto más cercano
         if conflicts_ends:
-            current_start=min(conflicts_ends)
+            next_start=min(conflicts_ends)
+            #Evitar bucles infinitos por si acaso
+            if next_start<=current_start:
+                current_start = current_start + timedelta(minutes=1)
+            else: 
+                current_start=next_start
+
             current_end=current_start+duration
-        else: # No hay forma de avanzar 
+        else: # No hay forma de avanzar(no hay eventos futuros que liberen recursos)
             return None, None, list(occupated_resources_set)
+        
 
 # Metodo para verificar que no hayan conflictos entre los recursos
 def validate_resources(resources, selected_resources):

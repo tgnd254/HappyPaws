@@ -1,26 +1,133 @@
 [
     {
-        "title": "Vacunacion",
-        "start": "2026-02-09 10:00",
-        "end": "2026-02-09 12:00",
+        "title": "Cirugía Ortopédica Firulais",
+        "start": "2026-07-10 09:00",
+        "end": "2026-07-10 11:30",
         "recurrence": "ninguna",
         "resources": [
             "Veterinario",
-            "Kit Médico Básico"
+            "Kit Médico Básico",
+            "Instrumental Quirúrgico",
+            "Perros",
+            "Correas y Arneses"
         ],
         "place": "sala_quirúrgica",
         "series_id": null
     },
     {
-        "title": "Vacunacion",
-        "start": "2026-02-09 11:00",
-        "end": "2026-02-09 13:00",
+        "title": "Campaña de Vacunación Canina",
+        "start": "2026-07-10 10:00",
+        "end": "2026-07-10 13:00",
         "recurrence": "ninguna",
+        "resources": [
+            "Vacuna Séxtuple Canina",
+            "Veterinario",
+            "Kit Médico Básico",
+            "Correas y Arneses",
+            "Perros"
+        ],
+        "place": "sala_de_procedimientos",
+        "series_id": null
+    },
+    {
+        "title": "Taller de Manejo de Réptiles Exóticos",
+        "start": "2026-07-10 14:00",
+        "end": "2026-07-10 16:00",
+        "recurrence": "ninguna",
+        "resources": [
+            "Serpientes",
+            "Terrario Especial",
+            "Voluntario de Adopciones",
+            "Cámara Digital"
+        ],
+        "place": "sala_de_entrevistas",
+        "series_id": null
+    },
+    {
+        "title": "Exhibición de réptiles",
+        "start": "2026-07-10 15:00",
+        "end": "2026-07-10 17:00",
+        "recurrence": "ninguna",
+        "resources": [
+            "Carpa de Exhibición",
+            "Voluntario",
+            "Folletos Informativos",
+            "Vehículo Petmóvil",
+            "Serpientes",
+            "Terrario Especial"
+        ],
+        "place": "exterior",
+        "series_id": null
+    },
+    {
+        "title": "Monitoreo Post Operatorio",
+        "start": "2026-07-10 11:30",
+        "end": "2026-07-11 17:30",
+        "recurrence": "diaria",
+        "until": "2026-07-13",
         "resources": [
             "Veterinario",
             "Kit Médico Básico"
         ],
+        "place": "sala_de_procedimientos",
+        "series_id": "2d4e5da6-cc50-489b-b6a1-1147bbde42bf"
+    },
+    {
+        "title": "Monitoreo Post Operatorio",
+        "start": "2026-07-11 11:30",
+        "end": "2026-07-12 17:30",
+        "recurrence": "diaria",
+        "until": "2026-07-13",
+        "resources": [
+            "Veterinario",
+            "Kit Médico Básico"
+        ],
+        "place": "sala_de_procedimientos",
+        "series_id": "2d4e5da6-cc50-489b-b6a1-1147bbde42bf"
+    },
+    {
+        "title": "Esterilización de Kitty",
+        "start": "2026-07-13 08:00",
+        "end": "2026-07-13 12:00",
+        "recurrence": "ninguna",
+        "resources": [
+            "Gatos",
+            "Instrumental Quirúrgico",
+            "Kit Médico Básico",
+            "Veterinario",
+            "Caja de Transporte"
+        ],
         "place": "sala_quirúrgica",
+        "series_id": null
+    },
+    {
+        "title": "Vacunación de conejos",
+        "start": "2026-07-13 10:00",
+        "end": "2026-07-13 14:00",
+        "recurrence": "ninguna",
+        "resources": [
+            "Vacuna Combinada para Conejos",
+            "Veterinario",
+            "Kit Médico Básico",
+            "Conejos",
+            "Jaula de Transporte"
+        ],
+        "place": "sala_de_procedimientos",
+        "series_id": null
+    },
+    {
+        "title": "Desparasitación de aves",
+        "start": "2026-07-13 12:00",
+        "end": "2026-07-13 16:00",
+        "recurrence": "ninguna",
+        "resources": [
+            "Ivermectina Oral",
+            "Veterinario",
+            "Kit Médico Básico",
+            "Aves",
+            "Jaula de Transporte"
+        ],
+        "place": "sala_de_procedimientos",
         "series_id": null
     }
 ]
