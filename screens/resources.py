@@ -1,18 +1,15 @@
-import json
+
 from kivy.uix.screenmanager import Screen
 from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.label import Label
 from kivy.uix.image import Image
-from kivy.uix.behaviors import ButtonBehavior
-from kivy.uix.button import Button
 from kivy.uix.scrollview import ScrollView
 from kivy.uix.gridlayout import GridLayout
 from kivy.uix.boxlayout import BoxLayout
 from kivy.graphics import Color, RoundedRectangle
 from kivy.clock import Clock
-from kivy.uix.popup import Popup
-from widgets import ImageButton,RoundedButton,show_message
-from utils import load_events,load_resources,save_events,validate_resources
+from widgets import ImageButton,show_message
+from utils import load_resources,validate_resources
 
 class ResourcesScreen(Screen):
     def __init__(self, **kwargs):
@@ -99,7 +96,6 @@ class ResourcesScreen(Screen):
             for animal, sound in animal_sounds.items(): 
                 if animal == resource_name: 
                     sound_file = sound 
-                    print(animal)
                     break
 
             # Mostrar imagen de los recursos

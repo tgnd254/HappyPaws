@@ -15,7 +15,6 @@ from kivymd.app import MDApp
 from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.image import Image
 from kivy.uix.screenmanager import ScreenManager, Screen, SlideTransition
-from kivy.core.window import Window
 from widgets import ImageButton
 
 from screens import PlaceScreen, ResourcesScreen, DateScreen, EventsScreen, RecurrenceScreen

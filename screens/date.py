@@ -1,5 +1,4 @@
-import json
-import uuid
+
 from datetime import datetime, timedelta
 from kivy.uix.screenmanager import Screen
 from kivy.uix.floatlayout import FloatLayout
@@ -190,6 +189,12 @@ class DateScreen(Screen):
         suggested_start, suggested_end, occupied = resources_available(start, end, resources, self.resources_info, self.events)
         
         #Si hay colisiones de recursos mostrar error y sugerir fecha
+        if suggested_start is None:
+            text_resources = "\n".join([f"      • {r}" for r in occupied])
+            show_message(
+                f"No hay ningún hueco disponible para los recursos seleccionados:\n{text_resources}\n"
+                f"Prueba con otros recursos o una fecha diferente.")
+            return
         if suggested_start != start:
             text_resources = "\n".join([f"      • {r}" for r in occupied])
             show_message(

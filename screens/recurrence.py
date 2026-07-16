@@ -5,19 +5,12 @@ from kivy.uix.screenmanager import Screen
 from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.label import Label
 from kivy.uix.textinput import TextInput
-from kivy.uix.button import Button
-from kivy.uix.scrollview import ScrollView
-from kivy.uix.gridlayout import GridLayout
-from kivy.uix.behaviors import ButtonBehavior
-from kivy.graphics import Color, RoundedRectangle
 from kivy.uix.image import Image
-from kivy.clock import Clock
-from kivy.uix.popup import Popup
-from widgets import ImageButton,RoundedButton,RoundedBox,show_message
+from widgets import ImageButton,RoundedBox,show_message
 from utils import load_events,load_resources,save_events,resources_available
 
 # Importar calendario y reloj ya creados
-from kivymd.uix.pickers import MDDatePicker, MDTimePicker
+from kivymd.uix.pickers import MDDatePicker
 
 class RecurrenceScreen(Screen):
     def __init__(self, **kwargs):
@@ -128,7 +121,7 @@ class RecurrenceScreen(Screen):
         # Mostrar mensaje de error si el formato es inválido
         try:
             until = datetime.strptime(self.input_until.text.strip(), "%Y-%m-%d")
-        except:
+        except ValueError:
             show_message("Debe rellenar la fecha de fin de la recurrencia")
             return
 
@@ -192,7 +185,10 @@ class RecurrenceScreen(Screen):
         if conflicts:
             for occ_start, occ_end, sug_start, sug_end, occupied in conflicts:
                 text_resources='\n'.join(occupied)
-                text+=f"En la fecha de {occ_start.strftime('%Y-%m-%d %H:%M')} a {occ_end.strftime('%Y-%m-%d %H:%M')}\n"+f"Estos recursos se encuentran ocupados:\n{text_resources}\n"+f"Te sugiero realizar tu evento: de {sug_start.strftime('%Y-%m-%d %H:%M')} a {sug_end.strftime('%Y-%m-%d %H:%M')}\n"
+                if sug_start is None:
+                    text+=f"En la fecha de {occ_start.strftime('%Y-%m-%d %H:%M')} a {occ_end.strftime('%Y-%m-%d %H:%M')}\n"+f"Estos recursos se encuentran ocupados:\n{text_resources}\n"+ f"No hay ningún hueco disponible para esta ocurrencia.\n\n"
+                else:
+                    text+=f"En la fecha de {occ_start.strftime('%Y-%m-%d %H:%M')} a {occ_end.strftime('%Y-%m-%d %H:%M')}\n"+f"Estos recursos se encuentran ocupados:\n{text_resources}\n"+f"Te sugiero realizar tu evento: de {sug_start.strftime('%Y-%m-%d %H:%M')} a {sug_end.strftime('%Y-%m-%d %H:%M')}\n"
             show_message(text)
             return
 

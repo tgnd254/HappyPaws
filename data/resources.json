@@ -39,7 +39,6 @@
     "exclusions": ["Perros", "Roedores", "Serpientes", "Conejos", "Gatos"],
     "quantity": 4
   },
-
   {
     "name": "Ivermectina Oral",
     "place": ["sala_de_procedimientos"],
@@ -64,7 +63,6 @@
     "exclusions": ["Entrenador Certificado", "Juguetes Interactivos"],
     "quantity": 3
   },
-
   {
     "name": "Veterinario",
     "place": ["sala_de_procedimientos", "sala_quirúrgica"],
@@ -113,7 +111,6 @@
     "exclusions": ["Voluntario"],
     "quantity": 1
   },
-
   {
     "name": "Llaves del Refugio",
     "place": ["exterior", "sala_de_entrevistas"],
@@ -146,7 +143,6 @@
     "exclusions": [],
     "quantity": 2
   },
-
   {
     "name": "Kit Médico Básico",
     "place": ["sala_de_procedimientos", "sala_quirúrgica"],

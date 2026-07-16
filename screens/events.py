@@ -1,21 +1,18 @@
-import json
 from datetime import datetime
 from kivy.uix.screenmanager import Screen
 from kivy.uix.scrollview import ScrollView
 from kivy.uix.gridlayout import GridLayout
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.label import Label
-from kivy.uix.button import Button
 from kivy.uix.popup import Popup
 from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.image import Image
-from kivy.uix.behaviors import ButtonBehavior
 from kivy.graphics import Color, RoundedRectangle
 from kivy.clock import Clock
 from widgets import ImageButton,RoundedButton,RoundedBox
-from utils import load_events,load_resources,save_events
+from utils import load_events,save_events
 
-load_events()
+
 
 class EventsScreen(Screen):
     def __init__(self, **kwargs): 

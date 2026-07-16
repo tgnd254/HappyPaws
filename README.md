@@ -297,7 +297,7 @@ Planificador-de-Eventos/
 ├── sounds/
 │   └── bark.mp3, meow.mp3, rabbit.mp3, bird.mp3, snake.mp3, rodent.mp3, click.mp3
 │
-├── Screens/
+├── screens/
 │   ├── __init__.py              ← convierte la carpeta en paquete Python
 │   ├── place.py                 ← PlaceScreen: selección del lugar
 │   ├── resources.py             ← ResourcesScreen: selección de recursos
